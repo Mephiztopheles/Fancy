@@ -1,6 +1,6 @@
 (function ( $ ) {
 
-    if ( typeof Fancy === "function" ) {
+    if ( typeof window.Fancy === "function" ) {
         console.error ( "Error: tried to load Fancy more than once" );
         return;
     }
@@ -30,8 +30,7 @@
 
 
     Fancy.api = Fancy.prototype = {
-        version: "1.1.1",
-        set version ( v ) {return this.version}
+        version: "1.1.1"
     };
 
     Fancy.isOpera        = !!window.opera || navigator.userAgent.indexOf ( ' OPR/' ) >= 0;
