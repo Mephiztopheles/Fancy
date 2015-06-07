@@ -1,37 +1,37 @@
-.FancySelect { border: 1px solid #E9EDEB; cursor: pointer; position: relative }
+.FancySelect { border : 1px solid #E9EDEB; cursor : pointer; position : relative }
 
-.FancySelect.FancySelect-open, .FancySelect:hover { border-color: #D3636B }
+.FancySelect.FancySelect-open, .FancySelect:hover { border-color : #D3636B }
 
-.FancySelect:not(.FancySelect-open) .FancySelect-options { display: none }
+.FancySelect:not(.FancySelect-open) .FancySelect-options { display : none }
 
-.FancySelect-open { z-index: 20 }
+.FancySelect-open { z-index : 20 }
 
-.FancySelect-selected { background: #FFF; color: rgba(0, 0, 0, 0.6); font-size: 14px; height: 14px; overflow: hidden; padding: 9px 42px 9px 21px; position: relative; text-overflow: ellipsis; white-space: nowrap }
+.FancySelect-selected { background : #FFF; color : rgba(0, 0, 0, 0.6); font-size : 14px; height : 14px; overflow : hidden; padding : 9px 42px 9px 21px; position : relative; text-overflow : ellipsis; white-space : nowrap }
 
-.FancySelect-options { background-color: #FFF; border: 1px solid #DFDFDF; max-height: 200px; min-width: 100%; position: absolute; right: -1px; top: 101%; overflow: auto; }
+.FancySelect-options { background-color : #FFF; border : 1px solid #DFDFDF; max-height : 200px; min-width : 100%; position : absolute; right : -1px; top : 101%; overflow : auto; }
 
-.FancySelect-optgroup  .FancySelect-option{ padding-left: 15px }
+.FancySelect-optgroup .FancySelect-option { padding-left : 15px }
 
-.FancySelect-opttitle { pointer-events: none }
+.FancySelect-opttitle { pointer-events : none }
 
-.FancySelect-input { float: none; margin: 0; padding: 7px 25px 7px 10px; width: 96% }
+.FancySelect-input { float : none; margin : 0; padding : 7px 25px 7px 10px; width : 96% }
 
-.FancySelect-input-clear { background: #CECECE; height: 14px; line-height: 11px; right: 5px; text-align: center; top: 7px; width: 13px }
+.FancySelect-input-clear { background : #CECECE; height : 14px; line-height : 11px; right : 5px; text-align : center; top : 7px; width : 13px }
 
-.FancySelect-option { border-top: none; border-top: 1px solid #C7C7C7; color: #666; padding: 5px 35px 5px 5px; transition: background-color .5s; -webkit-transition: background-color .5s }
+.FancySelect-option { border-top : none; border-top : 1px solid #C7C7C7; color : #666; padding : 5px 35px 5px 5px; transition : background-color .5s; -webkit-transition : background-color .5s }
 
-.FancySelect-option:hover { background-color: #F9F9F9 }
+.FancySelect-option:hover { background-color : #F9F9F9 }
 
-.FancySelect-option:hover .FancySelect-option-description { display: block }
+.FancySelect-option:hover .FancySelect-option-description { display : block }
 
-.FancySelect-option-description { display: none }
+.FancySelect-option-description { display : none }
 
-.FancySelect-option.selected:not(.FancySelect-option-reset) { background-color: #49A54F; color: #FFF }
+.FancySelect-option.selected:not(.FancySelect-option-reset) { background-color : #49A54F; color : #FFF }
 
-.FancySelect-option:first-child { border-top: 1px solid #CECECE }
+.FancySelect-option:first-child { border-top : 1px solid #CECECE }
 
-.FancySelect-option-reset.selected { background-color: #9F9CA5 }
+.FancySelect-option-reset.selected { background-color : #9F9CA5 }
 
-.FancySelect.multiple .FancySelect-option.selected:not(.FancySelect-option-reset) { background: #4287A5 }
+.FancySelect.multiple .FancySelect-option.selected:not(.FancySelect-option-reset) { background : #4287A5 }
 
-.FancySelect-element { position: absolute; z-index: -1; left: 10px; top: 0; width: 10px; display: block; height: 20px }
+.FancySelect-element { position : absolute; z-index : -1; left : 10px; top : 0; width : 10px; display : block; height : 20px }
