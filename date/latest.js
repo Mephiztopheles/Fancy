@@ -25,7 +25,7 @@
             return;
         }
 
-        SELF.settings  = Fancy.extend ( Fancy.settings[ NAME ], settings );
+        SELF.settings  = Fancy.extend ( SELF, Fancy.settings[ NAME ], settings );
         SELF.visible   = false;
         SELF.calculate = {
             day   : 24 * 60 * 60 * 1000,
@@ -37,10 +37,6 @@
         SELF.element = element;
         SELF.version = VERSION;
         SELF.name    = NAME;
-
-        SELF.enable = function () {};
-
-        SELF.disable = function () {};
 
         SELF.today    = SELF.decode ( SELF.encode ( new Date () ) );
         SELF.current  = SELF.element.val () ? SELF.decode ( SELF.element.val () ) : SELF.decode ( SELF.encode ( new Date () ) );
@@ -139,6 +135,10 @@
             }, 1 );
         } ).addClass ( SELF.name + '-element' ).data ( SELF.name, SELF );
 
+        SELF.html.dialog.click ( function ( e ) {
+            e.stopPropagation ();
+        } );
+
     };
     FancyDate.api.show             = function () {
         var SELF = this;
@@ -182,7 +182,7 @@
                 setTimeout ( function () {
                     show ();
                     SELF.html.dialog.addClass ( 'show' ).removeClass ( 'hide' );
-                } );
+                }, 0 );
             } else {
                 show ();
             }
@@ -278,6 +278,7 @@
                 } );
                 rowh.append ( u );
             }
+
             createHeader.call ( this, "mo" );
             createHeader.call ( this, "tu" );
             createHeader.call ( this, "we" );
@@ -435,10 +436,9 @@
     FancyDate.api.setYear          = function ( year ) {
         this.current.setYear ( year );
         this.create ();
-    }
-
-    Fancy.settings[ NAME ] = {
-        format        : 'dd.mm.yyyy',
+    };
+    Fancy.settings[ NAME ]         = {
+        format        : "dd.mm.yyyy",
         animated      : true,
         onShow        : function () {},
         onClose       : function () {},
