@@ -11,7 +11,7 @@
 
     var i       = 1,
         NAME    = "FancyNotify",
-        VERSION = "2.1.0",
+        VERSION = "2.2.0",
         logged  = false;
 
     function FancyNotify ( element, settings ) {
@@ -55,47 +55,47 @@
 
         SELF.html = {
             wrapper: preventSelect ( $ ( "<div/>", {
-                id   : NAME + "-wrapper-" + SELF.id,
-                class: NAME + "-wrapper"
+                id     : NAME + "-wrapper-" + SELF.id,
+                "class": NAME + "-wrapper"
             } ) ),
             inner  : $ ( "<div/>", {
-                id   : NAME + "-inner-" + SELF.id,
-                class: NAME + "-inner"
+                id     : NAME + "-inner-" + SELF.id,
+                "class": NAME + "-inner"
             } ),
             content: $ ( "<div/>", {
-                id   : NAME + "-content-" + SELF.id,
-                class: NAME + "-content"
+                id     : NAME + "-content-" + SELF.id,
+                "class": NAME + "-content"
             } ),
             title  : $ ( "<div/>", {
-                id   : NAME + "-title-" + SELF.id,
-                class: NAME + "-title",
-                html : SELF.settings.title
+                id     : NAME + "-title-" + SELF.id,
+                "class": NAME + "-title",
+                html   : SELF.settings.title
             } ),
             body   : $ ( "<div/>", {
-                id   : NAME + "-body-" + SELF.id,
-                class: NAME + "-body",
-                html : SELF.settings.text
+                id     : NAME + "-body-" + SELF.id,
+                "class": NAME + "-body",
+                html   : SELF.settings.text
             } ),
             icon   : $ ( "<div/>", {
-                id   : NAME + "-icon-" + SELF.id,
-                class: NAME + "-icon"
+                id     : NAME + "-icon-" + SELF.id,
+                "class": NAME + "-icon"
             } ),
             buttons: $ ( "<div/>", {
-                id   : NAME + "-buttons-" + SELF.id,
-                class: NAME + "-buttons"
+                id     : NAME + "-buttons-" + SELF.id,
+                "class": NAME + "-buttons"
             } ),
             close  : $ ( "<div/>", {
-                id   : NAME + "-close-" + SELF.id,
-                class: NAME + "-close"
+                id     : NAME + "-close-" + SELF.id,
+                "class": NAME + "-close"
             } )
         };
 
         if ( SELF.settings.buttons.length ) {
             SELF.settings.buttons.forEach ( function ( it ) {
                 var btn = $ ( "<div/>", {
-                    class: NAME + "-button",
-                    text : it.title,
-                    style: "width: " + ( 100 / SELF.settings.buttons.length ) + "%"
+                    "class": NAME + "-button",
+                    text   : it.title,
+                    style  : "width: " + ( 100 / SELF.settings.buttons.length ) + "%"
                 } );
                 SELF.html.buttons.append ( btn );
                 btn.on ( "click", function () {
@@ -138,9 +138,8 @@
         steady : false
     };
 
-    Fancy.notify     = true;
+    Fancy.notify     = VERSION;
     Fancy.api.notify = function ( settings ) {
-        var data = [];
         if ( this.element.length > 1 ) {
             var data = [];
             this.element.each ( function () {

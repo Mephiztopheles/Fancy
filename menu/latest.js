@@ -5,7 +5,7 @@
         Fancy : "1.1.0"
     } );
     var NAME    = "FancyMenu",
-        VERSION = "2.1.0",
+        VERSION = "2.2.0",
         i       = 0,
         logged  = false;
 
@@ -70,17 +70,17 @@
         for ( var name = 0; name < SELF.settings.menu.length; name++ ) {
             var n = SELF.settings.menu [ name ],
                 m = $ ( '<li/>', {
-                    id   : NAME + '-menu-' + name,
-                    class: NAME + '-menu-element'
+                    id     : NAME + '-menu-' + name,
+                    "class": NAME + '-menu-element'
                 } ).data ( 'name', name );
             m.append ( $ ( '<span/>', {
-                id   : NAME + '-menu-' + name + '-icon',
-                class: NAME + '-menu-icon ' + n.icon
+                id     : NAME + '-menu-' + name + '-icon',
+                "class": NAME + '-menu-icon ' + n.icon
             } ) );
             m.append ( $ ( '<span/>', {
-                id   : NAME + '-menu-' + name + '-text',
-                class: NAME + '-menu-text',
-                html : n.title || n.name || name
+                id     : NAME + '-menu-' + name + '-text',
+                "class": NAME + '-menu-text',
+                html   : n.title || n.name || name
             } ) );
             menu.append ( m );
 
@@ -121,7 +121,7 @@
         }
 
     };
-    Fancy.menu               = true;
+    Fancy.menu               = VERSION;
     Fancy.api.menu           = function ( settings ) {
         return this.set ( FancyMenu, settings );
     };

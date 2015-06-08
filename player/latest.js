@@ -2,7 +2,7 @@
 
     Fancy.require ( {
         jQuery: false,
-        Fancy : "1.1.0"
+        Fancy : "1.1.1"
     } );
     function preventSelect ( el ) {
         return el.on ( "selectstart", false ).attr ( 'unselectable', "on" ).css ( "userSelect", "none" );
@@ -27,7 +27,7 @@
 
     var i       = 1,
         NAME    = "FancyPlayer",
-        VERSION = "2.1.1",
+        VERSION = "2.2.0",
         logged  = false;
 
     function setSelector ( el, type ) {
@@ -557,7 +557,7 @@
         poster             : false
     };
 
-    Fancy.player     = true;
+    Fancy.player     = VERSION;
     Fancy.api.player = function ( settings ) {
         return this.set ( FancyPlayer, settings );
     };

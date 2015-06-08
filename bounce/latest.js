@@ -5,8 +5,7 @@
         Fancy : "1.1.0"
     } );
     var NAME    = "FancyBounce",
-        VERSION = "2.1.0",
-        logged  = false;
+        VERSION = "2.2.0";
 
     function FancyBounce ( element, settings ) {
         var SELF     = this;
@@ -83,7 +82,7 @@
 
     };
 
-    Fancy.bounce     = true;
+    Fancy.bounce     = VERSION;
     Fancy.api.bounce = function ( settings ) {
         return new FancyBounce ( this.element, settings );
     };

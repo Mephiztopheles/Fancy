@@ -209,23 +209,6 @@
         return position === "fixed" || !scrollParent.length ? $ ( el [ 0 ].ownerDocument || document ) : scrollParent;
     };
 
-    Fancy.extend = function ( SELF, a, b ) {
-        var settings = $.extend ( {}, a, b );
-        for ( var p in settings ) {
-            if ( settings.hasOwnProperty ( p ) ) {
-                Fancy.watch ( settings, p, function ( prop, old, val ) {
-                    if ( val != old && old ) {
-                        setTimeout ( function () {
-                            SELF.update && SELF.update ();
-                        }, 0 );
-                    }
-                    return val;
-                } );
-            }
-        }
-        return settings;
-    };
-
     Fancy.settings = {};
 
     Fancy.api.set = function ( api, settings ) {

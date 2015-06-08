@@ -2,10 +2,10 @@
 
     Fancy.require ( {
         jQuery: false,
-        Fancy : "1.1.0"
+        Fancy : "1.1.1"
     } );
     var NAME    = "FancyDate",
-        VERSION = "2.1.1",
+        VERSION = "2.2.0",
         logged  = false;
 
     function findByKey ( obj, index ) {
@@ -25,7 +25,7 @@
             return;
         }
 
-        SELF.settings  = Fancy.extend ( SELF, Fancy.settings[ NAME ], settings );
+        SELF.settings  = $.extend ( {}, Fancy.settings[ NAME ], settings );
         SELF.visible   = false;
         SELF.calculate = {
             day   : 24 * 60 * 60 * 1000,
@@ -41,6 +41,12 @@
         SELF.today    = SELF.decode ( SELF.encode ( new Date () ) );
         SELF.current  = SELF.element.val () ? SELF.decode ( SELF.element.val () ) : SELF.decode ( SELF.encode ( new Date () ) );
         SELF.selected = SELF.decode ( SELF.element.val () );
+        Fancy.watch ( Fancy, "selected", function ( prop, old, val ) {
+            setTimeout ( function () {
+                SELF.element.val ( SELF.encode ( SELF.selected ) );
+            }, 0 );
+            return new Date ( val );
+        } );
 
         SELF.init ();
         return SELF;
@@ -56,6 +62,7 @@
             logged = true;
             Fancy.version ( SELF );
         }
+        SELF.element.addClass ( SELF.name + '-element' );
 
         this.html = {
             wrapper      : $ ( '<div/>', {
@@ -126,19 +133,6 @@
             rows         : []
         };
 
-        SELF.element.on ( 'focus', function () {
-            if ( !SELF.visible && SELF.settings.query ( SELF.element ) ) SELF.show ();
-        } ).on ( "blur." + NAME, function ( e ) {
-            setTimeout ( function () {
-                if ( SELF.html.dialog.is ( ':visible' ) && !e.relatedTarget ) SELF.element[ 0 ].focus ();
-                else SELF.close ();
-            }, 1 );
-        } ).addClass ( SELF.name + '-element' ).data ( SELF.name, SELF );
-
-        SELF.html.dialog.click ( function ( e ) {
-            e.stopPropagation ();
-        } );
-
     };
     FancyDate.api.show             = function () {
         var SELF = this;
@@ -162,20 +156,6 @@
                 SELF.visible = true;
                 SELF.create ();
                 SELF.settings.onShow.call ( SELF );
-            }
-
-            if ( SELF.settings.free ) {
-                SELF.html.wrapper.unbind ( '.' + NAME ).on ( "click." + NAME, function ( e ) {
-                    if ( $ ( e.target ).is ( SELF.html.wrapper ) ) {
-                        SELF.close ();
-                    }
-                } );
-            } else {
-                $ ( document ).unbind ( '.' + NAME ).on ( "click." + NAME, function ( e ) {
-                    if ( !$ ( e.target ).is ( SELF.element ) && !$ ( e.target ).closest ( '#' + NAME + '-dialog' ).length && !$ ( e.target ).is ( '#' + NAME + '-dialog' ) ) {
-                        SELF.close ();
-                    }
-                } );
             }
 
             if ( SELF.settings.animated ) {
@@ -351,52 +331,56 @@
                 SELF.select ( new Date ( $ ( this ).data ( 'date' ) ) );
             } );
         }
-        SELF.element.on ( "keydown", function ( e ) {
+        SELF.element.off ( "." + NAME ).on ( "keydown." + NAME, function ( e ) {
             setTimeout ( function () {
                 if ( (e.which | e.keyCode) === 9 ) SELF.close ();
             }, 2 );
+        } ).on ( "focus." + NAME, function () {
+            if ( !SELF.visible && SELF.settings.query ( SELF.element ) ) SELF.show ();
+        } ).on ( "blur." + NAME, function () {
+            SELF.close ();
+        } ).on ( "input." + NAME + " paste." + NAME, function ( e ) {
+            e.preventDefault ();
+            e.stopPropagation ();
+        } );
+        $ ( document ).off ( "." + NAME ).on ( "click." + NAME, function ( e ) {
+            if ( !$ ( e.target ).is ( SELF.element ) )SELF.close ();
+        } );
+        SELF.html.dialog.off ( "mousedown" ).on ( "mousedown", function ( e ) {
+            e.preventDefault ();
+            e.stopPropagation ();
         } );
 
-        SELF.html.clear.unbind ( 'click' ).on ( 'click', function () {
-            SELF.element.val ( '' );
+        SELF.html.clear.off ( "click" ).on ( "click", function () {
+            SELF.element.val ( "" );
             SELF.selected = false;
             SELF.current  = SELF.today;
             SELF.close ();
         } );
 
-        SELF.html.dialog.unbind ( '.' + SELF.name ).on ( 'selectstart.' + SELF.name, function ( event ) {
+        SELF.html.dialog.off ( "." + SELF.name ).on ( 'selectstart.' + SELF.name, function ( event ) {
             "use strict";
             event.preventDefault ();
         } );
 
-        SELF.html.close.unbind ( 'click' ).on ( 'click', function () {
+        SELF.html.close.off ( "click" ).on ( 'click', function () {
             SELF.close ();
         } );
 
-        SELF.html.today.unbind ( 'click' ).on ( 'click', function () {
+        SELF.html.today.off ( 'click' ).on ( 'click', function () {
             SELF.select ( SELF.today );
             SELF.current = SELF.today;
             SELF.close ();
         } );
 
-        SELF.html.next.unbind ( 'click' ).on ( 'click', function () {
+        SELF.html.next.off ( 'click' ).on ( 'click', function () {
             SELF.current = new Date ( SELF.current.getFullYear (), SELF.current.getMonth () + 1, 1 );
             SELF.update ();
         } );
 
-        SELF.html.previous.unbind ( 'click' ).on ( 'click', function () {
+        SELF.html.previous.off ( 'click' ).on ( 'click', function () {
             SELF.current = new Date ( SELF.current.getFullYear (), SELF.current.getMonth () - 1, 1 );
             SELF.update ();
-        } );
-
-        SELF.html.wrapper.unbind ( 'click' ).on ( 'click', function ( e ) {
-            if ( $ ( e.target ).is ( SELF.html.wrapper ) ) {
-                SELF.close ();
-            }
-        } );
-        SELF.element.unbind ( "." + NAME ).on ( "input." + NAME + " paste." + NAME, function ( e ) {
-            e.preventDefault ();
-            e.stopPropagation ();
         } );
 
         return SELF;
@@ -405,7 +389,6 @@
         var SELF      = this;
         SELF.element.val ( SELF.encode ( date ) );
         SELF.selected = date;
-        SELF.current  = date;
         if ( typeof SELF.settings.onSelect == "function" ) SELF.settings.onSelect ( SELF.selected );
         SELF.close ();
         return SELF;
@@ -440,6 +423,7 @@
     Fancy.settings[ NAME ]         = {
         format        : "dd.mm.yyyy",
         animated      : true,
+        onSelect      : function () {},
         onShow        : function () {},
         onClose       : function () {},
         query         : function () {
@@ -492,7 +476,7 @@
             }
         }
     };
-    Fancy.date            = true;
+    Fancy.date            = VERSION;
     Fancy.api.date        = function ( settings ) {
         return this.set ( FancyDate, settings );
     };
