@@ -30,7 +30,7 @@
 
 
     Fancy.api = Fancy.prototype = {
-        version: "1.1.1"
+        version: "1.0.0"
     };
 
     Fancy.isOpera        = !!window.opera || navigator.userAgent.indexOf ( ' OPR/' ) >= 0;
