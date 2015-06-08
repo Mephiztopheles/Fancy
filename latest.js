@@ -211,20 +211,34 @@
 
     Fancy.settings = {};
 
-    Fancy.api.set = function ( api, settings ) {
+    function construct ( constructor, args ) {
+        function API () {
+            return constructor.apply ( this, args );
+        }
+
+        API.prototype = constructor.prototype;
+        return new API ();
+    }
+
+    Fancy.api.set = function ( api ) {
+        var args = [],
+            instance;
+        for ( var a = 1; a < arguments.length; a++ ) {
+            args.push ( arguments[ a ] );
+        }
         if ( this.element.length ) {
             var data = this.get ( api.prototype.name );
             if ( data && data.length ) {
                 for ( var i = 0; i < data.length; i++ ) {
                     if ( typeof data [ i ] == "undefined" ) {
-                        var instance = new api ( $ ( this.element [ i ] ), settings );
-                        data [ i ]   = instance;
+                        instance   = construct ( $ ( this.element [ i ] ), args );
+                        data [ i ] = instance;
                         $ ( this.element [ i ] ).data ( instance.name, instance );
                     }
                 }
             }
             if ( !data ) {
-                var instance = new api ( this.element, settings );
+                instance = construct ( this.element, args );
                 this.element.data ( instance.name, instance );
                 return instance;
             } else
