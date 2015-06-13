@@ -321,12 +321,12 @@
             pddng = mrgn.padding != false;
             brdr  = mrgn.border != false;
         }
-        return this.height ()
-            + (pddng ? parseInt ( this.css ( "paddingTop" ) ) : 0)
-            + (pddng ? parseInt ( this.css ( "paddingBottom" ) ) : 0)
-            + (brdr ? parseInt ( this.css ( "borderBottomWidth" ) ) : 0)
-            + (brdr ? parseInt ( this.css ( "borderTopWidth" ) ) : 0)
-            + (mrgn ? parseInt ( this.css ( "marginTop" ) ) + parseInt ( this.css ( "marginBottom" ) ) : 0);
+        return this.element.height ()
+            + (pddng ? parseInt ( this.element.css ( "paddingTop" ) ) : 0)
+            + (pddng ? parseInt ( this.element.css ( "paddingBottom" ) ) : 0)
+            + (brdr ? parseInt ( this.element.css ( "borderBottomWidth" ) ) : 0)
+            + (brdr ? parseInt ( this.element.css ( "borderTopWidth" ) ) : 0)
+            + (mrgn ? parseInt ( this.element.css ( "marginTop" ) ) + parseInt ( this.element.css ( "marginBottom" ) ) : 0);
     };
     Fancy.api.fullWidth  = function ( mrgn ) {
         var pddng = true, brdr = true;
@@ -334,12 +334,12 @@
             pddng = mrgn.padding != false;
             brdr  = mrgn.border != false;
         }
-        return this.width ()
-            + (pddng ? parseInt ( this.css ( "paddingLeft" ) ) : 0)
-            + (pddng ? parseInt ( this.css ( "paddingRight" ) ) : 0)
-            + (brdr ? parseInt ( this.css ( "borderLeftWidth" ) ) : 0)
-            + (brdr ? parseInt ( this.css ( "borderRightWidth" ) ) : 0)
-            + (mrgn ? parseInt ( this.css ( "marginLeft" ) ) + parseInt ( this.css ( "marginRight" ) ) : 0);
+        return this.element.width ()
+            + (pddng ? parseInt ( this.element.css ( "paddingLeft" ) ) : 0)
+            + (pddng ? parseInt ( this.element.css ( "paddingRight" ) ) : 0)
+            + (brdr ? parseInt ( this.element.css ( "borderLeftWidth" ) ) : 0)
+            + (brdr ? parseInt ( this.element.css ( "borderRightWidth" ) ) : 0)
+            + (mrgn ? parseInt ( this.element.css ( "marginLeft" ) ) + parseInt ( this.element.css ( "marginRight" ) ) : 0);
     };
     Fancy.getKey         = function ( o, s ) {
         s = s.replace ( /\[(\w+)\]/g, '.$1' ); // convert indexes to properties
