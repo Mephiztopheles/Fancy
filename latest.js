@@ -328,7 +328,7 @@
             + (brdr ? parseInt ( this.css ( "borderTopWidth" ) ) : 0)
             + (mrgn ? parseInt ( this.css ( "marginTop" ) ) + parseInt ( this.css ( "marginBottom" ) ) : 0);
     };
-    jQuery.fn.fullWidth  = function ( mrgn ) {
+    Fancy.api.fullWidth  = function ( mrgn ) {
         var pddng = true, brdr = true;
         if ( typeof mrgn === "object" ) {
             pddng = mrgn.padding != false;
