@@ -86,7 +86,7 @@
 
 
     Fancy.api = Fancy.prototype = {
-        version: "1.0.1",
+        version: "1.0.2",
         name   : "Fancy"
     };
 
@@ -139,7 +139,12 @@
     Fancy.require        = function ( plugins ) {
         for ( var i in plugins ) {
             if ( plugins.hasOwnProperty ( i ) ) {
-                var vers = window [ i ].prototype.version || ( i == "jQuery" ? jQuery.prototype.jquery : false );
+                var vers;
+                if ( i.indexOf ( "Fancy." ) == 0 ) {
+                    vers = Fancy.getKey ( window, i );
+                } else {
+                    vers = window [ i ].prototype.version || ( i == "jQuery" ? jQuery.prototype.jquery : false );
+                }
                 if ( typeof window [ i ] == "undefined" || ( vers && plugins [ i ] && Fancy.compareversion ( plugins [ i ], vers ) ) ) {
                     throw "Error: " + i + " " + ( plugins [ i ] ? plugins [ i ] + " " : "" ) + "is required" + ( vers ? ", got " + vers : "" );
                 }
@@ -358,5 +363,7 @@
     };
 
     window.Fancy = Fancy;
-    Fancy.version ( Fancy.api );
+    $ ( function () {
+        Fancy.version ( Fancy.api );
+    } );
 }) ( jQuery );
