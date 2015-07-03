@@ -1,0 +1,40 @@
+{
+  "name": "fancy",
+  "title": "Fancy",
+  "description": "JavaScript library for styleable content and new input features",
+  "version": "1.0.2",
+  "main": "fancy.js",
+  "homepage": "http://mephiztopheles.wtf/fancy",
+  "author": {
+    "name": "Markus Ahrweiler"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mephiztopheles/fancy.git"
+  },
+  "ignore": [
+    "source",
+    "spec",
+    ".bowerrc",
+    ".gitignore",
+    ".jshintignore",
+    ".jshintrc",
+    "bower.json",
+    "gruntfile.js",
+    "package.json",
+    "README.md"
+  ],
+  "keywords": [
+    "fancy",
+    "javascript",
+    "browser",
+    "library"
+  ],
+  "bugs": {
+    "url": "https://github.com/Mephiztopheles/fancy/issues"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "jquery": ">=1.9.1"
+  }
+}
