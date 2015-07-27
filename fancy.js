@@ -284,7 +284,7 @@
 
         if ( this.element.length ) {
             var data = this.get ( name );
-            if ( check ? false : data && data.length ) {
+            if ( check === false ? false : data && data.length ) {
                 for ( var i = 0; i < data.length; i++ ) {
                     if ( typeof data [ i ] == "undefined" ) {
                         instance   = fn ( $ ( this.element [ i ] ) );
@@ -293,7 +293,7 @@
                     }
                 }
             }
-            if ( check : true : !data ) {
+            if ( check === false ? true : !data ) {
                 instance = fn ( this.element );
                 this.element.data ( name, instance );
                 return instance;
