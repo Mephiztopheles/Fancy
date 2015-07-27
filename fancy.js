@@ -279,12 +279,12 @@
         return position === "fixed" || !scrollParent.length ? $ ( el [ 0 ].ownerDocument || document ) : scrollParent;
     };
     Fancy.settings       = {};
-    Fancy.api.set        = function ( name, fn ) {
+    Fancy.api.set        = function ( name, fn, check ) {
         var instance;
 
         if ( this.element.length ) {
             var data = this.get ( name );
-            if ( data && data.length ) {
+            if ( check ? false : data && data.length ) {
                 for ( var i = 0; i < data.length; i++ ) {
                     if ( typeof data [ i ] == "undefined" ) {
                         instance   = fn ( $ ( this.element [ i ] ) );
@@ -293,7 +293,7 @@
                     }
                 }
             }
-            if ( !data ) {
+            if ( check : true : !data ) {
                 instance = fn ( this.element );
                 this.element.data ( name, instance );
                 return instance;
