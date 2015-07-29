@@ -268,7 +268,7 @@
         var position            = el.css ( "position" ),
             excludeStaticParent = position === "absolute",
             scrollParent        = el.prop ( 'nodeName' ) == "TEXTAREA" && el [ 0 ].scrollHeight - el.outerHeight () > 0 ? el : false;
-        if ( !el )
+
             scrollParent = el.parents ().filter ( function () {
                 var parent = $ ( this );
                 if ( excludeStaticParent && parent.css ( "position" ) === "static" ) {
