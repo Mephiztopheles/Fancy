@@ -86,7 +86,7 @@
 
 
     Fancy.api = Fancy.prototype = {
-        version: "1.0.3",
+        version: "1.0.4",
         name   : "Fancy"
     };
 
@@ -95,8 +95,8 @@
     Fancy.isSafari       = Object.prototype.toString.call ( window.HTMLElement ).indexOf ( 'Constructor' ) > 0;
     Fancy.isChrome       = !!window.chrome && !this.isOpera;
     Fancy.isIE           = !!document.documentMode;
-    Fancy.apple          = n.indexOf ( "iphone" ) > 0 || n.indexOf ( "ipad" ) > 0 || n.indexOf ( "ipod" ) > 0;
-    Fancy.mobile         = n.indexOf ( "mobile" ) > 0 || Fancy.apple;
+    Fancy.apple          = n.indexOf ( "iphone" ) >= 0 || n.indexOf ( "ipad" ) >= 0 || n.indexOf ( "ipod" ) > 0;
+    Fancy.mobile         = n.indexOf ( "mobile" ) >= 0 || n.indexOf ( "android" ) >= 0 || Fancy.apple;
     Fancy.versionControl = true;
 
     Fancy.version        = function ( plugin ) {
