@@ -2,7 +2,7 @@
   "name": "fancy",
   "title": "Fancy",
   "description": "JavaScript library for styleable content and new input features",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "fancy.js",
   "homepage": "http://mephiztopheles.wtf/fancy",
   "author": {
