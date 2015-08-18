@@ -10,6 +10,22 @@
         return;
     }
 
+
+    var getType = (function () {
+    var class2type = {},
+        toString   = class2type.toString;
+    "Boolean Number String Function Array Date RegExp Object Error".split( " " ).forEach( function ( name ) {
+        class2type[ "[object " + name + "]" ] = name.toLowerCase();
+    } );
+    return function ( obj ) {
+        if ( obj === null ) {
+            return obj + "";
+        }
+        // Support: Android<4.0, iOS<6 (functionish RegExp)
+        return typeof obj === "object" || typeof obj === "function" ? class2type[ toString.call( obj ) ] || "object" : typeof obj;
+    };
+})();
+
     var n = navigator.userAgent.toLowerCase();
 
     function Fancy( element ) {
@@ -79,6 +95,40 @@
     Fancy.isArray      = function isArray( obj ) {
         return Object.prototype.toString.call( obj ) === '[object Array]';
     };
+    Fancy.is = function is( a, b ) {
+    if ( getType( a ) === "array" && getType( b ) === "array" ) {
+        if ( a.length != b.length )
+            return false;
+        for ( var i = 0; i < a.length; i++ ) {
+            if ( a.hasOwnProperty( i ) ) {
+                if ( getType( a[ i ] ) === "object" ) {
+                    if ( a[ i ].id && a[ i ].class ) {
+                        if ( !b.findBy( { "class": a[ i ].class, id: a[ i ].id } ) ) {
+                            return false;
+                        }
+                    } else if ( a[ i ].id ) {
+
+                        if ( !b.findBy( { id: a[ i ].id } ) ) {
+                            return false;
+                        }
+                    } else if ( a[ i ].name ) {
+
+                        if ( !b.findBy( { name: a[ i ].name } ) ) {
+                            return false;
+                        }
+                    }
+                } else {
+                    if ( b.indexOf( a[ i ] ) < 0 )
+                        return false;
+                }
+            }
+        }
+    } else if ( getType( a ) === "object" && getType( b ) === "object" ) {
+
+    } else if ( getType( a ) !== getType( b ) ) {
+        return false
+    } else return a === b;
+};
     Fancy.capitalize   = function capitalize( str ) {
         return str [ 0 ].toUpperCase() + str.slice( 1 );
     };
