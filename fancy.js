@@ -19,6 +19,12 @@
         this.name    = "Fancy";
     }
 
+    Fancy.versionControl = true;
+
+    Fancy.preventSelect = function preventSelect( el ) {
+        return el.on( "selectstart", false ).attr( 'unselectable', "on" ).css( "userSelect", "none" );
+    };
+
     Fancy.findByAnd = function( array, obj, returnIndex ) {
         function findByAnd() {
             var resolved = true,
@@ -88,7 +94,7 @@
 
 
     Fancy.api = Fancy.prototype = {
-        version: "1.0.6",
+        version: "1.0.7",
         name   : "Fancy"
     };
 
