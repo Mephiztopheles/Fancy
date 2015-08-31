@@ -144,7 +144,7 @@
 
 
     Fancy.api = Fancy.prototype = {
-        version: "1.0.7",
+        version: "1.0.6",
         name   : "Fancy"
     };
 
