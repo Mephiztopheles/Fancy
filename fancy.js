@@ -201,7 +201,7 @@
                     if( i.indexOf( "Fancy." ) == 0 ) {
                         vers = Fancy.getKey( window, i );
                     } else {
-                        vers = window [ i ].prototype.version || ( i == "jQuery" ? jQuery.prototype.jquery : false );
+                        vers = window [ i ].prototype.version || ( i == "jQuery" ? $.prototype.jquery : false );
                     }
                     if( typeof window [ i ] == "undefined" || ( vers && plugins [ i ] && Fancy.compareversion( plugins [ i ], vers ) ) ) {
                         throw "Error: " + i + " " + ( plugins [ i ] ? plugins [ i ] + " " : "" ) + "is required" + ( vers ? ", got " + vers : "" );
@@ -323,7 +323,7 @@
     Fancy.scrollParent   = function( el ) {
         var position            = el.css( "position" ),
             excludeStaticParent = position === "absolute",
-            scrollParent        = el.prop( 'nodeName' ) == "TEXTAREA" && el [ 0 ].scrollHeight - el.outerHeight() > 0 ? el : false;
+            scrollParent;
 
         scrollParent = el.parents().filter( function() {
             var parent = $( this );
