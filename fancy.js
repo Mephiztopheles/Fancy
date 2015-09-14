@@ -140,13 +140,11 @@
     Fancy.decapitalize = function decapitalize( str ) {
         return str [ 0 ].toLowerCase() + str.slice( 1 );
     };
-
-
-    Fancy.api = Fancy.prototype = {
-        version: "1.0.6",
+    Fancy.getType      = getType;
+    Fancy.api          = Fancy.prototype = {
+        version: "1.0.7",
         name   : "Fancy"
     };
-
     Fancy.isOpera        = !!window.opera || navigator.userAgent.indexOf( ' OPR/' ) >= 0;
     Fancy.isFirefox      = typeof InstallTrigger !== 'undefined';
     Fancy.isSafari       = Object.prototype.toString.call( window.HTMLElement ).indexOf( 'Constructor' ) > 0;
@@ -155,7 +153,6 @@
     Fancy.apple          = n.indexOf( "iphone" ) >= 0 || n.indexOf( "ipad" ) >= 0 || n.indexOf( "ipod" ) > 0;
     Fancy.mobile         = n.indexOf( "mobile" ) >= 0 || n.indexOf( "android" ) >= 0 || Fancy.apple;
     Fancy.versionControl = true;
-
     Fancy.version        = function( plugin ) {
         if( Fancy.versionControl ) {
             if( Fancy.isChrome ) {
