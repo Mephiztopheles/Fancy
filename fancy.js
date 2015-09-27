@@ -1,12 +1,24 @@
-(function( $ ) {
+(function() {
+    "use strict";
 
+    var jqueryScript,
+        jqueryUrl = "//code.jquery.com/jquery-$VERSION.min.js";
+    if( typeof jQuery != "function" ) {
+        jqueryScript        = document.createElement( 'script' );
+        jqueryScript.src    = jqueryUrl.replace( "$VERSION", "1.11.3" );
+        document.getElementsByTagName( 'head' )[ 0 ].appendChild( jqueryScript );
+        jqueryScript.onload = function() {
+            jQuery( function() {
+                Fancy.version( Fancy.api );
+            } );
+        };
+    } else {
+        jQuery( function() {
+            Fancy.version( Fancy.api );
+        } );
+    }
     if( typeof window.Fancy === "function" ) {
         console.error( "Error: tried to load Fancy more than once" );
-        return;
-    }
-
-    if( typeof jQuery != "function" ) {
-        console.error( 'jQuery * > 1.7 required' );
         return;
     }
 
@@ -20,7 +32,6 @@
             if( obj === null ) {
                 return obj + "";
             }
-            // Support: Android<4.0, iOS<6 (functionish RegExp)
             return typeof obj === "object" || typeof obj === "function" ? class2type[ toString.call( obj ) ] || "object" : typeof obj;
         };
     })();
@@ -30,7 +41,7 @@
     function Fancy( element ) {
         if( this == window )
             return new Fancy( element );
-        this.element = $( element );
+        this.element = jQuery( element );
         this.name    = "Fancy";
     }
 
@@ -142,13 +153,13 @@
     };
     Fancy.getType      = getType;
     Fancy.api          = Fancy.prototype = {
-        version: "1.0.7",
+        version: "1.0.8",
         name   : "Fancy"
     };
     Fancy.isOpera        = !!window.opera || navigator.userAgent.indexOf( ' OPR/' ) >= 0;
     Fancy.isFirefox      = typeof InstallTrigger !== 'undefined';
     Fancy.isSafari       = Object.prototype.toString.call( window.HTMLElement ).indexOf( 'Constructor' ) > 0;
-    Fancy.isChrome       = !!window.chrome && !this.isOpera;
+    Fancy.isChrome       = !!window.chrome && !Fancy.isOpera;
     Fancy.isIE           = !!document.documentMode;
     Fancy.apple          = n.indexOf( "iphone" ) >= 0 || n.indexOf( "ipad" ) >= 0 || n.indexOf( "ipod" ) > 0;
     Fancy.mobile         = n.indexOf( "mobile" ) >= 0 || n.indexOf( "android" ) >= 0 || Fancy.apple;
@@ -161,7 +172,7 @@
                 console.log( "This page is using " + plugin.name + "\r\n Copyright\u00a9 Markus Ahrweiler\r\n Version: " + plugin.version );
             }
 
-            $.ajax( {
+            jQuery.ajax( {
                 url    : 'http://version.mephiztopheles.wtf/',
                 data   : {
                     plugin: plugin.name
@@ -191,14 +202,14 @@
         }
     };
     Fancy.require        = function( plugins ) {
-        $( function() {
+        jQuery( function() {
             for( var i in plugins ) {
                 if( plugins.hasOwnProperty( i ) ) {
                     var vers;
                     if( i.indexOf( "Fancy." ) == 0 ) {
                         vers = Fancy.getKey( window, i );
                     } else {
-                        vers = window [ i ].prototype.version || ( i == "jQuery" ? $.prototype.jquery : false );
+                        vers = window [ i ].prototype.version || ( i == "jQuery" ? jQuery.prototype.jquery : false );
                     }
                     if( typeof window [ i ] == "undefined" || ( vers && plugins [ i ] && Fancy.compareversion( plugins [ i ], vers ) ) ) {
                         throw "Error: " + i + " " + ( plugins [ i ] ? plugins [ i ] + " " : "" ) + "is required" + ( vers ? ", got " + vers : "" );
@@ -323,13 +334,13 @@
             scrollParent;
 
         scrollParent = el.parents().filter( function() {
-            var parent = $( this );
+            var parent = jQuery( this );
             if( excludeStaticParent && parent.css( "position" ) === "static" ) {
                 return false;
             }
             return ( /(auto|scroll)/ ).test( parent.css( "overflow" ) + parent.css( "overflow-y" ) + parent.css( "overflow-x" ) ) && parent [ 0 ].scrollHeight - parent.outerHeight() > 0;
         } ).eq( 0 );
-        return position === "fixed" || !scrollParent.length ? $( el [ 0 ].ownerDocument || document ) : scrollParent;
+        return position === "fixed" || !scrollParent.length ? jQuery( el [ 0 ].ownerDocument || document ) : scrollParent;
     };
     Fancy.settings       = {};
     Fancy.api.set        = function( name, fn, check ) {
@@ -340,9 +351,9 @@
             if( check === false ? false : data && data.length ) {
                 for( var i = 0; i < data.length; i++ ) {
                     if( typeof data [ i ] == "undefined" ) {
-                        instance   = fn( $( this.element [ i ] ) );
+                        instance   = fn( jQuery( this.element [ i ] ) );
                         data [ i ] = instance;
-                        $( this.element [ i ] ).data( name, instance );
+                        jQuery( this.element [ i ] ).data( name, instance );
                     }
                 }
             }
@@ -369,7 +380,7 @@
         if( this.element.length > 1 ) {
             var ret = [];
             this.element.each( function() {
-                ret.push( $( this ).data( name ) );
+                ret.push( jQuery( this ).data( name ) );
             } );
             return ret;
         }
@@ -418,7 +429,4 @@
     };
 
     window.Fancy = Fancy;
-    $( function() {
-        Fancy.version( Fancy.api );
-    } );
-})( jQuery );
+})();
