@@ -1,12 +1,34 @@
-(function() {
-    "use strict";
+(function( global, factory ) {
+
+    if( typeof module === "object" && typeof module.exports === "object" ) {
+        // For CommonJS and CommonJS-like environments where a proper window is present,
+        // execute the factory and get jQuery
+        // For environments that do not inherently posses a window with a document
+        // (such as Node.js), expose a jQuery-making factory as module.exports
+        // This accentuates the need for the creation of a real window
+        // e.g. var jQuery = require("jquery")(window);
+        // See ticket #14549 for more info
+        module.exports = global.document ? factory( global, true ) : function( w ) {
+            if( !w.document ) {
+                throw new Error( "Fancy requires a window with a document" );
+            }
+            return factory( w );
+        };
+    } else {
+        factory( global );
+    }
+
+// Pass this if window is not defined yet
+}( typeof window !== "undefined" ? window : this, function( window, noGlobal ) {
+
+
 
     var jqueryScript,
         jqueryUrl = "//code.jquery.com/jquery-$VERSION.min.js";
     if( typeof jQuery != "function" ) {
-        jqueryScript        = document.createElement( 'script' );
+        jqueryScript        = document.createElement( "script" );
         jqueryScript.src    = jqueryUrl.replace( "$VERSION", "1.11.3" );
-        document.getElementsByTagName( 'head' )[ 0 ].appendChild( jqueryScript );
+        document.getElementsByTagName( "head" )[ 0 ].appendChild( jqueryScript );
         jqueryScript.onload = function() {
             jQuery( function() {
                 Fancy.version( Fancy.api );
@@ -48,7 +70,11 @@
     Fancy.versionControl = true;
 
     Fancy.preventSelect = function preventSelect( el ) {
-        return el.on( "selectstart", false ).attr( 'unselectable', "on" ).css( "userSelect", "none" );
+        return el.on( "selectstart", false ).attr( "unselectable", "on" ).css( "userSelect", "none" );
+    };
+
+    Fancy.allowSelect = function( el ) {
+        return el.off( "selectstart" ).removeAttr( "unselectable" ).css( "userSelect", "" );
     };
 
     Fancy.findByAnd = function( array, obj, returnIndex ) {
@@ -156,9 +182,9 @@
         version: "1.0.8",
         name   : "Fancy"
     };
-    Fancy.isOpera        = !!window.opera || navigator.userAgent.indexOf( ' OPR/' ) >= 0;
-    Fancy.isFirefox      = typeof InstallTrigger !== 'undefined';
-    Fancy.isSafari       = Object.prototype.toString.call( window.HTMLElement ).indexOf( 'Constructor' ) > 0;
+    Fancy.isOpera        = !!window.opera || navigator.userAgent.indexOf( " OPR/" ) >= 0;
+    Fancy.isFirefox      = typeof InstallTrigger !== "undefined";
+    Fancy.isSafari       = Object.prototype.toString.call( window.HTMLElement ).indexOf( "Constructor" ) > 0;
     Fancy.isChrome       = !!window.chrome && !Fancy.isOpera;
     Fancy.isIE           = !!document.documentMode;
     Fancy.apple          = n.indexOf( "iphone" ) >= 0 || n.indexOf( "ipad" ) >= 0 || n.indexOf( "ipod" ) > 0;
@@ -173,24 +199,24 @@
             }
 
             jQuery.ajax( {
-                url    : 'http://version.mephiztopheles.wtf/',
+                url    : "http://version.mephiztopheles.wtf/",
                 data   : {
                     plugin: plugin.name
                 },
-                type   : 'POST',
+                type   : "POST",
                 global : false,
                 success: function( v ) {
                     if( v ) {
                         if( Fancy.compareversion( v, plugin.version ) ) {
                             if( Fancy.isChrome ) {
-                                console.warn( '%cYou are using an older version of %c' + plugin.name + '. %cThe newest version is: ' + v, 'color: #000', 'color: #8E0000', 'color: #000' );
+                                console.warn( "%cYou are using an older version of %c" + plugin.name + ". %cThe newest version is: " + v, "color: #000", "color: #8E0000", "color: #000" );
                             } else {
-                                console.warn( 'You are using an older version of ' + plugin.name + '. The newest version is: ' + v );
+                                console.warn( "You are using an older version of " + plugin.name + ". The newest version is: " + v );
                             }
                         }
                     } else {
                         if( Fancy.isChrome ) {
-                            console.warn( "Couldn't retrieve version control information for %c" + plugin.name + "%c!", 'color: #8E0000', 'color. #000' );
+                            console.warn( "Couldn't retrieve version control information for %c" + plugin.name + "%c!", "color: #8E0000", "color. #000" );
                         } else {
                             console.warn( "Couldn't retrieve version control information for " + plugin.name + "!" );
                         }
@@ -428,5 +454,10 @@
         return o;
     };
 
-    window.Fancy = Fancy;
-})();
+
+    if( typeof noGlobal === typeof undefined ) {
+        window.Fancy = Fancy;
+    }
+    return Fancy;
+
+} ));
