@@ -21,8 +21,6 @@
 // Pass this if window is not defined yet
 }( typeof window !== "undefined" ? window : this, function( window, noGlobal ) {
 
-
-
     var jqueryScript,
         jqueryUrl = "//code.jquery.com/jquery-$VERSION.min.js";
     if( typeof jQuery != "function" ) {
@@ -43,20 +41,17 @@
         console.error( "Error: tried to load Fancy more than once" );
         return;
     }
-
-    var getType = (function() {
-        var class2type = {},
-            toString   = class2type.toString;
-        "Boolean Number String Function Array Date RegExp Object Error".split( " " ).forEach( function( name ) {
-            class2type[ "[object " + name + "]" ] = name.toLowerCase();
-        } );
-        return function( obj ) {
-            if( obj === null ) {
-                return obj + "";
-            }
-            return typeof obj === "object" || typeof obj === "function" ? class2type[ toString.call( obj ) ] || "object" : typeof obj;
-        };
-    })();
+    var class2type = {},
+        toString   = class2type.toString;
+    "Boolean Number String Function Array Date RegExp Object Error".split( " " ).forEach( function( name ) {
+        class2type[ "[object " + name + "]" ] = name.toLowerCase();
+    } );
+    function getType( obj ) {
+        if( obj === null ) {
+            return obj + "";
+        }
+        return typeof obj === "object" || typeof obj === "function" ? class2type[ toString.call( obj ) ] || "object" : typeof obj;
+    }
 
     var n = navigator.userAgent.toLowerCase();
 
@@ -69,10 +64,20 @@
 
     Fancy.versionControl = true;
 
+    /**
+     * @Deprecated
+     * @param el
+     * @returns {*}
+     */
     Fancy.preventSelect = function preventSelect( el ) {
         return el.on( "selectstart", false ).attr( "unselectable", "on" ).css( "userSelect", "none" );
     };
 
+    /**
+     * @Deprecated
+     * @param el
+     * @returns {*}
+     */
     Fancy.allowSelect = function( el ) {
         return el.off( "selectstart" ).removeAttr( "unselectable" ).css( "userSelect", "" );
     };
@@ -182,15 +187,15 @@
         version: "1.0.8",
         name   : "Fancy"
     };
-    Fancy.isOpera        = !!window.opera || navigator.userAgent.indexOf( " OPR/" ) >= 0;
-    Fancy.isFirefox      = typeof InstallTrigger !== "undefined";
-    Fancy.isSafari       = Object.prototype.toString.call( window.HTMLElement ).indexOf( "Constructor" ) > 0;
-    Fancy.isChrome       = !!window.chrome && !Fancy.isOpera;
-    Fancy.isIE           = !!document.documentMode;
-    Fancy.apple          = n.indexOf( "iphone" ) >= 0 || n.indexOf( "ipad" ) >= 0 || n.indexOf( "ipod" ) > 0;
-    Fancy.mobile         = n.indexOf( "mobile" ) >= 0 || n.indexOf( "android" ) >= 0 || Fancy.apple;
-    Fancy.versionControl = true;
-    Fancy.version        = function( plugin ) {
+    Fancy.isOpera           = !!window.opera || navigator.userAgent.indexOf( " OPR/" ) >= 0;
+    Fancy.isFirefox         = typeof InstallTrigger !== "undefined";
+    Fancy.isSafari          = Object.prototype.toString.call( window.HTMLElement ).indexOf( "Constructor" ) > 0;
+    Fancy.isChrome          = !!window.chrome && !Fancy.isOpera;
+    Fancy.isIE              = !!document.documentMode;
+    Fancy.apple             = n.indexOf( "iphone" ) >= 0 || n.indexOf( "ipad" ) >= 0 || n.indexOf( "ipod" ) > 0;
+    Fancy.mobile            = n.indexOf( "mobile" ) >= 0 || n.indexOf( "android" ) >= 0 || Fancy.apple;
+    Fancy.versionControl    = true;
+    Fancy.version           = function( plugin ) {
         if( Fancy.versionControl ) {
             if( Fancy.isChrome ) {
                 console.log( "%cThis page is using %c" + plugin.name + "%c\r\n Copyright \u00a9 %cMarkus Ahrweiler\r\n %cVersion: %c" + plugin.version, 'color: #000', 'color: #8E0000', 'color: #000', 'color: #49A54F', 'color: #000', 'color: blue' );
@@ -227,7 +232,7 @@
             } );
         }
     };
-    Fancy.require        = function( plugins ) {
+    Fancy.require           = function( plugins ) {
         jQuery( function() {
             for( var i in plugins ) {
                 if( plugins.hasOwnProperty( i ) ) {
@@ -244,14 +249,14 @@
             }
         } );
     };
-    Fancy.compareversion = function( needed, is ) {
+    Fancy.compareversion    = function( needed, is ) {
         // returns true, if needed is greater than is;
         var c = [ parseInt( needed.split( "." ) [ 0 ] ), parseInt( needed.split( "." ) [ 1 ] ), parseInt( needed.split( "." ) [ 2 ] ) ],
             d = [ parseInt( is.split( "." ) [ 0 ] ), parseInt( is.split( "." ) [ 1 ] ), parseInt( is.split( "." ) [ 2 ] ) ];
 
         return c [ 0 ] > d [ 0 ] || ( c [ 0 ] == d [ 0 ] && c [ 1 ] > d [ 1 ] ) || ( c [ 1 ] == d [ 1 ] && c [ 2 ] > d [ 2 ] );
     };
-    Fancy.check          = function( s, p ) {
+    Fancy.check             = function( s, p ) {
         for( var i in p ) {
             if( p.hasOwnProperty( i ) ) {
                 var r, t, a, type;
@@ -319,7 +324,7 @@
         }
 
     };
-    Fancy.watch          = function( obj, prop, handler ) {
+    Fancy.watch             = function( obj, prop, handler ) {
         var oldval = obj[ prop ], newval = oldval,
             getter = function() {
                 return newval;
@@ -349,12 +354,12 @@
             }
         }
     };
-    Fancy.unwatch        = function( obj, prop ) {
+    Fancy.unwatch           = function( obj, prop ) {
         var val     = obj[ prop ];
         delete obj[ prop ];
         obj[ prop ] = val;
     };
-    Fancy.scrollParent   = function( el ) {
+    Fancy.scrollParent      = function( el ) {
         var position            = el.css( "position" ),
             excludeStaticParent = position === "absolute",
             scrollParent;
@@ -368,8 +373,8 @@
         } ).eq( 0 );
         return position === "fixed" || !scrollParent.length ? jQuery( el [ 0 ].ownerDocument || document ) : scrollParent;
     };
-    Fancy.settings       = {};
-    Fancy.api.set        = function( name, fn, check ) {
+    Fancy.settings          = {};
+    Fancy.api.set           = function( name, fn, check ) {
         var instance;
 
         if( this.element.length ) {
@@ -391,54 +396,63 @@
                 return data;
         }
     };
-    Fancy.api.get        = function( name ) {
-        if( name.indexOf( 'Fancy' ) != 0 ) {
-            if( typeof this [ name ] == "function" ) {
-                name = "Fancy" + name [ 0 ].toUpperCase() + name.slice( 1, name.length );
+    Fancy.api.get           = function( margin ) {
+        if( margin.indexOf( 'Fancy' ) != 0 ) {
+            if( typeof this [ margin ] == "function" ) {
+                margin = "Fancy" + margin [ 0 ].toUpperCase() + margin.slice( 1, margin.length );
             } else {
                 if( this.isChrome )
-                    console.error( "\"%c" + name + "%c\" is not a function of Fancy!", "color: blue", "color: #000" );
+                    console.error( "\"%c" + margin + "%c\" is not a function of Fancy!", "color: blue", "color: #000" );
                 else
-                    console.error( "\"" + name + "\" is not a function of Fancy!" );
+                    console.error( "\"" + margin + "\" is not a function of Fancy!" );
                 return false;
             }
         }
         if( this.element.length > 1 ) {
             var ret = [];
             this.element.each( function() {
-                ret.push( jQuery( this ).data( name ) );
+                ret.push( jQuery( this ).data( margin ) );
             } );
             return ret;
         }
-        return this.element.data( name );
+        return this.element.data( margin );
     };
-    Fancy.api.fullHeight = function( mrgn ) {
+    Fancy.api.fullHeight    = function( margin ) {
         var padding = true, border = true;
-        if( typeof mrgn === "object" ) {
-            padding = mrgn.padding != false;
-            border  = mrgn.border != false;
+        if( typeof margin === "object" ) {
+            padding = margin.padding != false;
+            border  = margin.border != false;
         }
         return this.element.height()
                + (padding ? parseInt( this.element.css( "paddingTop" ) ) : 0)
                + (padding ? parseInt( this.element.css( "paddingBottom" ) ) : 0)
                + (border ? parseInt( this.element.css( "borderBottomWidth" ) ) : 0)
                + (border ? parseInt( this.element.css( "borderTopWidth" ) ) : 0)
-               + (mrgn ? parseInt( this.element.css( "marginTop" ) ) + parseInt( this.element.css( "marginBottom" ) ) : 0);
+               + (margin ? parseInt( this.element.css( "marginTop" ) ) + parseInt( this.element.css( "marginBottom" ) ) : 0);
     };
-    Fancy.api.fullWidth  = function( mrgn ) {
+    Fancy.api.fullWidth     = function( margin ) {
         var padding = true, border = true;
-        if( typeof mrgn === "object" ) {
-            padding = mrgn.padding != false;
-            border  = mrgn.border != false;
+        if( typeof margin === "object" ) {
+            padding = margin.padding != false;
+            border  = margin.border != false;
         }
         return this.element.width()
                + (padding ? parseInt( this.element.css( "paddingLeft" ) ) : 0)
                + (padding ? parseInt( this.element.css( "paddingRight" ) ) : 0)
                + (border ? parseInt( this.element.css( "borderLeftWidth" ) ) : 0)
                + (border ? parseInt( this.element.css( "borderRightWidth" ) ) : 0)
-               + (mrgn ? parseInt( this.element.css( "marginLeft" ) ) + parseInt( this.element.css( "marginRight" ) ) : 0);
+               + (margin ? parseInt( this.element.css( "marginLeft" ) ) + parseInt( this.element.css( "marginRight" ) ) : 0);
     };
-    Fancy.getKey         = function( o, s ) {
+    Fancy.api.preventSelect = function() {
+        this.element.on( "selectstart", false ).attr( "unselectable", "on" ).css( "userSelect", "none" );
+        return this.element;
+    };
+    Fancy.api.allowSelect   = function() {
+        this.element.off( "selectstart" ).removeAttr( "unselectable" ).css( "userSelect", "" );
+        return this.element;
+    };
+
+    Fancy.getKey = function( o, s ) {
         s = s.replace( /\[(\w+)\]/g, '.$1' ); // convert indexes to properties
         s = s.replace( /^\./, '' ); // strip a leading dot
         var a = s.split( '.' );
