@@ -468,7 +468,6 @@
         return o;
     };
 
-
     if( typeof noGlobal === typeof undefined ) {
         window.Fancy = Fancy;
     }
