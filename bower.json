@@ -3,7 +3,7 @@
   "title": "Fancy",
   "description": "JavaScript library for styleable content and new input features",
   "version": "1.1.0",
-  "main": "fancy.js",
+  "main": "fancy.min.js",
   "homepage": "http://mephiztopheles.wtf/fancy",
   "author": {
     "name": "Markus Ahrweiler"
