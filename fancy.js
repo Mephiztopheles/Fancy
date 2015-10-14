@@ -24,6 +24,8 @@
     var jqueryScript,
         jqueryUrl = "//code.jquery.com/jquery-$VERSION.min.js";
     if( typeof jQuery != "function" ) {
+        
+    // document.querySelector("script[src*='jquery']")
         jqueryScript        = document.createElement( "script" );
         jqueryScript.src    = jqueryUrl.replace( "$VERSION", "1.11.3" );
         document.getElementsByTagName( "head" )[ 0 ].appendChild( jqueryScript );
