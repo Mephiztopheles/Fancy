@@ -196,9 +196,9 @@
     Fancy.version           = function( plugin ) {
         if( Fancy.versionControl ) {
             if( Fancy.isChrome ) {
-                console.log( "%cThis page is using %c" + plugin.name + "%c\r\n Copyright \u00a9 %cMarkus Ahrweiler\r\n %cVersion: %c" + plugin.version, 'color: #000', 'color: #8E0000', 'color: #000', 'color: #49A54F', 'color: #000', 'color: blue' );
+                console.log( "%cThis page is using %c" + plugin.name + "%c\r\nCopyright \u00a9 %cMarkus Ahrweiler\r\n%cVersion: %c" + plugin.version, 'color: #000', 'color: #8E0000', 'color: #000', 'color: #49A54F', 'color: #000', 'color: blue' );
             } else {
-                console.log( "This page is using " + plugin.name + "\r\n Copyright\u00a9 Markus Ahrweiler\r\n Version: " + plugin.version );
+                console.log( "This page is using " + plugin.name + "\r\nCopyright\u00a9 Markus Ahrweiler\r\nVersion: " + plugin.version );
             }
 
             jQuery.ajax( {
