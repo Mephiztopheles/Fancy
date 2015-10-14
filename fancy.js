@@ -22,12 +22,13 @@
 }( typeof window !== "undefined" ? window : this, function( window, noGlobal ) {
 
     if( typeof jQuery != "function" ) {
-        document.write('<script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>');
-        var scripts = document.getElementsByTagName( "script" );
-        scripts[scripts.length-1].onload = function() {
-            jQuery( function() {
-                Fancy.version( Fancy.api );
-            } );
+        document.write( '<script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>' );
+        var scripts                                      = document.getElementsByTagName( "script" );
+        scripts[ scripts.length - 1 ].onload             = function() {
+            Fancy.version( Fancy.api );
+        };
+        scripts[ scripts.length - 1 ].onreadystatechange = function() {
+            Fancy.version( Fancy.api );
         };
     } else {
         jQuery( function() {
@@ -181,14 +182,14 @@
     };
     Fancy.getType      = getType;
     Fancy.api          = Fancy.prototype = {
-        version: "1.0.8",
+        version: "1.1.0",
         name   : "Fancy"
     };
     Fancy.isOpera           = !!window.opera || navigator.userAgent.indexOf( " OPR/" ) >= 0;
     Fancy.isFirefox         = typeof InstallTrigger !== "undefined";
     Fancy.isSafari          = Object.prototype.toString.call( window.HTMLElement ).indexOf( "Constructor" ) > 0;
-    Fancy.isChrome          = !!window.chrome && !Fancy.isOpera;
     Fancy.isIE              = !!document.documentMode;
+    Fancy.isChrome          = !!window.chrome && !Fancy.isOpera && n.indexOf( "edge/" ) === -1 && !Fancy.isIE;
     Fancy.apple             = n.indexOf( "iphone" ) >= 0 || n.indexOf( "ipad" ) >= 0 || n.indexOf( "ipod" ) > 0;
     Fancy.mobile            = n.indexOf( "mobile" ) >= 0 || n.indexOf( "android" ) >= 0 || Fancy.apple;
     Fancy.versionControl    = true;
