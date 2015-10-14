@@ -21,15 +21,10 @@
 // Pass this if window is not defined yet
 }( typeof window !== "undefined" ? window : this, function( window, noGlobal ) {
 
-    var jqueryScript,
-        jqueryUrl = "//code.jquery.com/jquery-$VERSION.min.js";
     if( typeof jQuery != "function" ) {
-        
-    // document.querySelector("script[src*='jquery']")
-        jqueryScript        = document.createElement( "script" );
-        jqueryScript.src    = jqueryUrl.replace( "$VERSION", "1.11.3" );
-        document.getElementsByTagName( "head" )[ 0 ].appendChild( jqueryScript );
-        jqueryScript.onload = function() {
+        document.write('<script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>');
+        var scripts = document.getElementsByTagName( "script" );
+        scripts[scripts.length-1].onload = function() {
             jQuery( function() {
                 Fancy.version( Fancy.api );
             } );
