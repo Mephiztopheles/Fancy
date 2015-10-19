@@ -304,68 +304,74 @@
 
         return c [ 0 ] > d [ 0 ] || ( c [ 0 ] == d [ 0 ] && c [ 1 ] > d [ 1 ] ) || ( c [ 1 ] == d [ 1 ] && c [ 2 ] > d [ 2 ] );
     };
-    Fancy.check             = function( s, p ) {
-        for( var i in p ) {
-            if( p.hasOwnProperty( i ) ) {
-                var r, t, a, type;
-                if( p [ i ].type ) {
-                    r = true;
-                    t = p [ i ].type.split( "|" );
-                    for( a = 0; a < t.length; a++ ) {
-                        if( r ) {
-                            type = s [ i ] instanceof window [ t [ a ] ] || typeof s [ i ] === t [ a ].toLowerCase();
+    Fancy.check             = function( settings, pattern ) {
+        function checkType( instance, object ) {
+            if( getType( window [ instance ] ) === "function" ) {
+                return object instanceof window [ instance ] || getType( object ) === instance.toLowerCase();
+            }
+            return getType( object ) === instance.toLowerCase();
+        }
+
+        for( var i in pattern ) {
+            if( pattern.hasOwnProperty( i ) ) {
+                var mismatch, typeArray, loopCount, type;
+                if( pattern [ i ].type ) {
+                    mismatch  = true;
+                    typeArray = pattern [ i ].type.split( "|" );
+                    for( loopCount = 0; loopCount < typeArray.length; loopCount++ ) {
+                        if( mismatch ) {
+                            type = checkType( typeArray [ loopCount ], settings[ i ] );
                             if( type ) {
-                                r = false;
+                                mismatch = false;
                             }
                         }
                     }
-                    if( r ) {
-                        throw "Error: Expected type " + t.join( " or " ) + " but got " + capitalize( typeof s [ i ] ) + " for " + i;
+                    if( mismatch ) {
+                        throw "Error: Expected type " + typeArray.join( " or " ) + " but got " + Fancy.capitalize( typeof settings [ i ] ) + " for " + i;
                     }
                 }
 
-                if( p [ i ].required ) {
-                    r = false;
-                    switch( typeof s[ i ] ) {
+                if( pattern [ i ].required ) {
+                    mismatch = false;
+                    switch( getType( settings[ i ] ) ) {
                         case "string":
-                            if( !s [ i ] ) {
-                                r = true;
+                            if( !settings [ i ] ) {
+                                mismatch = true;
                             }
                             break;
                         case "object":
-                            if( s [ i ] === null ) {
-                                r = true;
-                            } else if( !Object.keys( s [ i ] ).length ) {
-                                r = true;
+                            if( settings [ i ] === null ) {
+                                mismatch = true;
+                            } else if( !Object.keys( settings [ i ] ).length ) {
+                                mismatch = true;
                             }
                             break;
                         case "undefined":
-                            r = true;
+                            mismatch = true;
                             break;
                     }
-                    if( r ) {
+                    if( mismatch ) {
                         throw "Error: " + i + " is required";
                     }
                 }
 
-                if( p [ i ].types && s [ i ] && s [ i ].length ) {
-                    for( var b = 0; b < s [ i ].length; b++ ) {
-                        t = p [ i ].types.split( "|" );
-                        r = false;
-                        for( a = 0; a < t.length; a++ ) {
-                            if( !r ) {
-                                type = s [ i ] [ b ] instanceof window [ t [ a ] ] || typeof s [ i ] [ b ] === t [ a ].toLowerCase();
-
-                                if( s [ i ] [ b ] === null && t [ a ] != "Null" ) {
+                if( pattern [ i ].types && settings [ i ] && settings [ i ].length ) {
+                    for( var b = 0; b < settings [ i ].length; b++ ) {
+                        typeArray = pattern [ i ].types.split( "|" );
+                        mismatch  = false;
+                        for( loopCount = 0; loopCount < typeArray.length; loopCount++ ) {
+                            if( !mismatch ) {
+                                type = checkType( typeArray [ loopCount ], settings[ i ][ b ] );
+                                if( settings [ i ] [ b ] === null && typeArray [ loopCount ] != "Null" ) {
                                     type = false;
                                 }
                                 if( type ) {
-                                    r = true;
+                                    mismatch = true;
                                 }
                             }
                         }
-                        if( !r ) {
-                            throw "Error: Expected type " + t.join( " or " ) + " but got " + capitalize( s [ i ] [ b ] === null ? "null" : typeof s [ i ] [ b ] ) + " for " + i + "'s items";
+                        if( !mismatch ) {
+                            throw "Error: Expected type " + typeArray.join( " or " ) + " but got " + Fancy.capitalize( getType( settings [ i ] [ b ] ) ) + " for " + i + "'s items";
                         }
                     }
                 }
