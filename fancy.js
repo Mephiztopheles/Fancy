@@ -12,7 +12,11 @@
     }
 // Pass this if window is not defined yet
 }( typeof window !== "undefined" ? window : this, function ( window, noGlobal ) {
-
+    var root = (function () {
+        var e = document.getElementsByTagName( "script" ), n = e[ e.length - 1 ], r = n.src.replace( location.origin, "" ).split( "/" ), t = location.pathname.split( "/" ), i = !1, o = 0;
+        for ( var a in r )i || (r[ a ] == t[ a ] ? o++ : i = !0);
+        return location.origin + t.slice( 0, o ).join( "/" );
+    })();
     if ( typeof jQuery != "function" ) {
         document.write( '<script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>' );
         var scripts                                      = document.getElementsByTagName( "script" );
@@ -493,7 +497,7 @@
      * @param uri
      * @returns {string}
      */
-    Fancy.url            = function ( uri ) {
+    Fancy.url = function ( uri ) {
         if ( typeof uri === "string" ) {
             return uri.charAt( 0 ) === "/" ? Fancy.root + uri : Fancy.root + "/" + uri;
         }
@@ -509,11 +513,7 @@
     Fancy.versionControl = true;
     Fancy.debugEnabled   = false;
     Fancy.settings       = {};
-    Fancy.root           = (function () {
-        var e = document.getElementsByTagName( "script" ), n = e[ e.length - 1 ], r = n.src.replace( location.origin, "" ).split( "/" ), t = location.pathname.split( "/" ), i = !1, o = 0;
-        for ( var a in r )i || (r[ a ] == t[ a ] ? o++ : i = !0);
-        return location.origin + t.slice( 0, o ).join( "/" );
-    })();
+    Fancy.root           = root;
 
     Fancy.api = Fancy.prototype = {
         version: "1.2.0",
