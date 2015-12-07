@@ -5,8 +5,40 @@
         <title>Fancy</title>
         <script src="../fancy.js"></script>
         <script>Fancy.install( "template" )( function() {console.log( Fancy.template )} );</script>
-        <script>Fancy.install("date")(function(){console.log(Fancy.date)});</script>
+        <script>Fancy.install( "date" )( function() {console.log( Fancy.date )} );</script>
     </head>
-    <body></body>
+    <body>
+        <div id="template">
+            <h1>{{ title }}</h1>
+
+            <div>{{ text }}</div>
+
+            <form>
+                <input type="text" placeholder="add text and press ENTER">
+            </form>
+            <pre>{{ input }}</pre>
+        </div>
+        <script>
+            var scope = {
+                title: "Open Console!",
+                text : "Recently installed jQuery, Fancy.template and Fancy.date.",
+                input: ""
+            };
+            var tpl = Fancy( "#template" ).template( { scope: scope } );
+            tpl.compile();
+            $( "form" ).on( "submit", function( e ) {
+                e.preventDefault();
+                update( this[ 0 ] );
+            } );
+            function update( input ) {
+                if( !input ) {
+                    return;
+                }
+                scope.input += input.value + "\r\n";
+                input.value = "";
+                tpl.update();
+            }
+        </script>
+    </body>
 
 </html>

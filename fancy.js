@@ -1,8 +1,8 @@
-(function( global, factory ) {
-    if( typeof module === "object" && typeof module.exports === "object" ) {
+(function ( global, factory ) {
+    if ( typeof module === "object" && typeof module.exports === "object" ) {
 
-        module.exports = global.document ? factory( global, true ) : function( w ) {
-            if( !w.document ) {
+        module.exports = global.document ? factory( global, true ) : function ( w ) {
+            if ( !w.document ) {
                 throw new Error( "Fancy requires a window with a document" );
             }
             return factory( w );
@@ -11,33 +11,38 @@
         factory( global );
     }
 // Pass this if window is not defined yet
-}( typeof window !== "undefined" ? window : this, function( window, noGlobal ) {
+}( typeof window !== "undefined" ? window : this, function ( window, noGlobal ) {
 
-    if( typeof jQuery != "function" ) {
+    if ( typeof jQuery != "function" ) {
         document.write( '<script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>' );
         var scripts                                      = document.getElementsByTagName( "script" );
-        scripts[ scripts.length - 1 ].onload             = function() {
+        scripts[ scripts.length - 1 ].onload             = function () {
             Fancy.version( Fancy.api );
         };
-        scripts[ scripts.length - 1 ].onreadystatechange = function() {
+        scripts[ scripts.length - 1 ].onreadystatechange = function () {
             Fancy.version( Fancy.api );
         };
     } else {
-        jQuery( function() {
+        jQuery( function () {
             Fancy.version( Fancy.api );
         } );
     }
-    if( typeof window.Fancy === "function" ) {
+    if ( typeof window.Fancy === "function" ) {
         console.error( "Error: tried to load Fancy more than once" );
         return;
     }
     var class2type = {},
         toString   = class2type.toString;
-    "Boolean Number String Function Array Date RegExp Object Error".split( " " ).forEach( function( name ) {
+    "Boolean Number String Function Array Date RegExp Object Error".split( " " ).forEach( function ( name ) {
         class2type[ "[object " + name + "]" ] = name.toLowerCase();
     } );
+    /**
+     * returns real type of object
+     * @param obj
+     * @returns {*}
+     */
     function getType( obj ) {
-        if( obj === null ) {
+        if ( obj === null ) {
             return obj + "";
         }
         return typeof obj === "object" || typeof obj === "function" ? class2type[ toString.call( obj ) ] || "object" : typeof obj;
@@ -46,7 +51,7 @@
     var n = navigator.userAgent.toLowerCase();
 
     function Fancy( element ) {
-        if( this == window ) {
+        if ( this == window ) {
             return new Fancy( element );
         }
         this.element = jQuery( element );
@@ -58,39 +63,36 @@
      * @param name
      * @param version
      */
-    Fancy.install = function( name, version ) {
-        var onReady = function() {},
+    Fancy.install = function ( name, version ) {
+        var onReady = function () {},
             script  = document.createElement( "script" );
         name        = name.toLowerCase();
-        if( Fancy[ name ] ) {
-            return function( onReady ) {
-                if( typeof onReady === "function" ) {
+        if ( Fancy[ name ] ) {
+            return function ( onReady ) {
+                if ( typeof onReady === "function" ) {
                     onReady();
                     return true;
                 }
             };
         }
         script.src = "//cdn.rawgit.com/Mephiztopheles/Fancy." + name + "/" + (version || "master") + "/fancy" + name + ".min.js";
-        if( document.readyState === "complete" ) {
+        if ( document.readyState === "complete" ) {
             jQuery.ajax( {
                 url    : script.src,
-                success: function() {
-                    jQuery( "head" ).append( script );
-                    onReady();
-                },
-                error  : function() {
+                success: onReady,
+                error  : function () {
                     console.error( "could not load plugin" );
                 }
             } );
         } else {
             document.write( script.outerHTML );
-            setTimeout( function() {
+            setTimeout( function () {
                 onReady();
             }, 1 );
         }
-        return function( callback ) {
-            if( typeof onReady === "function" ) {
-                if( document.readyState === "complete" ) {
+        return function ( callback ) {
+            if ( typeof onReady === "function" ) {
+                if ( document.readyState === "complete" ) {
                     onReady = callback;
                 } else {
                     $( callback );
@@ -99,42 +101,28 @@
             }
         }
     };
-
-    Fancy.versionControl = true;
-
     /**
-     * @Deprecated
-     * @param el
+     * search in array for one
+     * @param array
+     * @param obj
+     * @param returnIndex
      * @returns {*}
      */
-    Fancy.preventSelect = function preventSelect( el ) {
-        return el.on( "selectstart", false ).attr( "unselectable", "on" ).css( "userSelect", "none" );
-    };
-
-    /**
-     * @Deprecated
-     * @param el
-     * @returns {*}
-     */
-    Fancy.allowSelect = function( el ) {
-        return el.off( "selectstart" ).removeAttr( "unselectable" ).css( "userSelect", "" );
-    };
-
-    Fancy.findByAnd = function( array, obj, returnIndex ) {
+    Fancy.findByAnd = function ( array, obj, returnIndex ) {
         function findByAnd() {
             var resolved = true,
                 i        = 0;
-            while( i < this.length ) {
+            while ( i < this.length ) {
                 resolved = true;
-                for( var a in obj ) {
-                    if( obj.hasOwnProperty( a ) ) {
-                        if( (a.toLowerCase().indexOf( "date" ) >= 0 ? new Date( Fancy.getKey( this[ i ], a ) ).getTime() : Fancy.getKey( this[ i ], a )) != (a.toLowerCase().indexOf( "date" ) >= 0 ? new Date( obj[ a ] ).getTime() : obj[ a ]) ) {
+                for ( var a in obj ) {
+                    if ( obj.hasOwnProperty( a ) ) {
+                        if ( (a.toLowerCase().indexOf( "date" ) >= 0 ? new Date( Fancy.getKey( this[ i ], a ) ).getTime() : Fancy.getKey( this[ i ], a )) != (a.toLowerCase().indexOf( "date" ) >= 0 ? new Date( obj[ a ] ).getTime() : obj[ a ]) ) {
                             resolved = false;
                             break;
                         }
                     }
                 }
-                if( resolved == true ) {
+                if ( resolved == true ) {
                     resolved = i;
                     break;
                 }
@@ -147,21 +135,26 @@
 
         return findByAnd.apply( array );
     };
-
-    Fancy.findAllBy = function( arr, obj ) {
+    /**
+     * search in array for all
+     * @param arr
+     * @param obj
+     * @returns {*}
+     */
+    Fancy.findAllBy = function ( arr, obj ) {
         function findAllBy() {
             var list     = [],
                 resolved = true;
-            this.forEach( function( it ) {
+            this.forEach( function ( it ) {
                 resolved = true;
-                for( var a in obj ) {
-                    if( obj.hasOwnProperty( a ) ) {
-                        if( (a.toLowerCase().indexOf( "date" ) >= 0 ? new Date( Fancy.getKey( this, a ) ).getTime() : Fancy.getKey( this, a )) != (a.toLowerCase().indexOf( "date" ) >= 0 ? new Date( obj[ a ] ).getTime() : obj[ a ]) ) {
+                for ( var a in obj ) {
+                    if ( obj.hasOwnProperty( a ) ) {
+                        if ( (a.toLowerCase().indexOf( "date" ) >= 0 ? new Date( Fancy.getKey( this, a ) ).getTime() : Fancy.getKey( this, a )) != (a.toLowerCase().indexOf( "date" ) >= 0 ? new Date( obj[ a ] ).getTime() : obj[ a ]) ) {
                             resolved = false;
                         }
                     }
                 }
-                if( resolved == true ) {
+                if ( resolved == true ) {
                     list.push( it );
                 }
             } );
@@ -170,76 +163,104 @@
 
         return findAllBy.apply( arr );
     };
-
-    Fancy.JSONvalid    = function JSONvalid( text ) {
+    /**
+     * check if string is valid JSON
+     * @param {String} text
+     * @returns {*|boolean}
+     * @constructor
+     */
+    Fancy.JSONvalid = function JSONvalid( text ) {
         return text && /^[\],:{}\s]*$/.test( text.replace( /\\["\\\/bfnrtu]/g, '@' ).replace( /"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']' ).replace( /(?:^|:|,)(?:\s*\[)+/g, '' ) )
     };
-    Fancy.isObject     = function isObject( obj ) {
+    /**
+     * shorthand to Fancy.getType( obj ) === "object"
+     * @param obj
+     * @returns {boolean}
+     */
+    Fancy.isObject = function isObject( obj ) {
         return {}.toString.apply( obj ) === '[object Object]';
     };
-    Fancy.isArray      = function isArray( obj ) {
+    /**
+     * shorthand to Fancy.getType( obj ) === "array"
+     * @param obj
+     * @returns {boolean}
+     */
+    Fancy.isArray = function isArray( obj ) {
         return Object.prototype.toString.call( obj ) === '[object Array]';
     };
-    Fancy.is           = function is( a, b ) {
-        if( getType( a ) === "array" && getType( b ) === "array" ) {
-            if( a.length != b.length ) {
+    /**
+     * check if 2 objects are the same
+     * Supports class and id for database-objects
+     * @param a
+     * @param b
+     * @returns {boolean}
+     */
+    Fancy.is = function is( a, b ) {
+        if ( getType( a ) === "array" && getType( b ) === "array" ) {
+            if ( a.length != b.length ) {
                 return false;
             }
-            for( var i = 0; i < a.length; i++ ) {
-                if( a.hasOwnProperty( i ) ) {
-                    if( getType( a[ i ] ) === "object" ) {
-                        if( a[ i ].id && a[ i ].class ) {
-                            if( !b.findBy( { "class": a[ i ].class, id: a[ i ].id } ) ) {
+            for ( var i = 0; i < a.length; i++ ) {
+                if ( a.hasOwnProperty( i ) ) {
+                    if ( getType( a[ i ] ) === "object" ) {
+                        if ( a[ i ].id && a[ i ].class ) {
+                            if ( !b.findBy( { "class": a[ i ].class, id: a[ i ].id } ) ) {
                                 return false;
                             }
-                        } else if( a[ i ].id ) {
+                        } else if ( a[ i ].id ) {
 
-                            if( !b.findBy( { id: a[ i ].id } ) ) {
+                            if ( !b.findBy( { id: a[ i ].id } ) ) {
                                 return false;
                             }
-                        } else if( a[ i ].name ) {
+                        } else if ( a[ i ].name ) {
 
-                            if( !b.findBy( { name: a[ i ].name } ) ) {
+                            if ( !b.findBy( { name: a[ i ].name } ) ) {
                                 return false;
                             }
                         }
                     } else {
-                        if( b.indexOf( a[ i ] ) < 0 ) {
+                        if ( b.indexOf( a[ i ] ) < 0 ) {
                             return false;
                         }
                     }
                 }
             }
-        } else if( getType( a ) === "object" && getType( b ) === "object" ) {
+        } else if ( getType( a ) === "object" && getType( b ) === "object" ) {
 
-        } else if( getType( a ) !== getType( b ) ) {
+        } else if ( getType( a ) !== getType( b ) ) {
             return false
         } else {
             return a === b;
         }
     };
-    Fancy.capitalize   = function capitalize( str ) {
+    /**
+     * Capitalize String
+     * @param {String} str
+     * @returns {string}
+     */
+    Fancy.capitalize = function capitalize( str ) {
         return str [ 0 ].toUpperCase() + str.slice( 1 );
     };
+    /**
+     * Decapitalize String
+     * @param {String} str
+     * @returns {string}
+     */
     Fancy.decapitalize = function decapitalize( str ) {
         return str [ 0 ].toLowerCase() + str.slice( 1 );
     };
-    Fancy.getType      = getType;
-    Fancy.api          = Fancy.prototype = {
-        version: "1.1.1",
-        name   : "Fancy"
-    };
-    Fancy.isOpera           = !!window.opera || navigator.userAgent.indexOf( " OPR/" ) >= 0;
-    Fancy.isFirefox         = typeof InstallTrigger !== "undefined";
-    Fancy.isSafari          = Object.prototype.toString.call( window.HTMLElement ).indexOf( "Constructor" ) > 0;
-    Fancy.isIE              = !!document.documentMode;
-    Fancy.isChrome          = !!window.chrome && !Fancy.isOpera && n.indexOf( "edge/" ) === -1 && !Fancy.isIE;
-    Fancy.apple             = n.indexOf( "iphone" ) >= 0 || n.indexOf( "ipad" ) >= 0 || n.indexOf( "ipod" ) > 0;
-    Fancy.mobile            = n.indexOf( "mobile" ) >= 0 || n.indexOf( "android" ) >= 0 || Fancy.apple;
-    Fancy.versionControl    = true;
-    Fancy.version           = function( plugin ) {
-        if( Fancy.versionControl ) {
-            if( Fancy.isChrome ) {
+    /**
+     * get real type of object
+     * @type {getType}
+     */
+    Fancy.getType = getType;
+    /**
+     * checks and Logs version
+     * @param {Function} plugin
+     */
+    Fancy.version = function ( plugin ) {
+        if ( Fancy.versionControl ) {
+            if ( Fancy.isChrome ) {
                 console.log( "%cThis page is using %c" + plugin.name + "%c\r\nCopyright \u00a9 %cMarkus Ahrweiler\r\n%cVersion: %c" + plugin.version, 'color: #000', 'color: #8E0000', 'color: #000', 'color: #49A54F', 'color: #000', 'color: blue' );
             } else {
                 console.log( "This page is using " + plugin.name + "\r\nCopyright\u00a9 Markus Ahrweiler\r\nVersion: " + plugin.version );
@@ -252,17 +273,17 @@
                 },
                 type   : "POST",
                 global : false,
-                success: function( v ) {
-                    if( v ) {
-                        if( Fancy.compareversion( v, plugin.version ) ) {
-                            if( Fancy.isChrome ) {
+                success: function ( v ) {
+                    if ( v ) {
+                        if ( Fancy.compareversion( v, plugin.version ) ) {
+                            if ( Fancy.isChrome ) {
                                 console.warn( "%cYou are using an older version of %c" + plugin.name + ". %cThe newest version is: " + v, "color: #000", "color: #8E0000", "color: #000" );
                             } else {
                                 console.warn( "You are using an older version of " + plugin.name + ". The newest version is: " + v );
                             }
                         }
                     } else {
-                        if( Fancy.isChrome ) {
+                        if ( Fancy.isChrome ) {
                             console.warn( "Couldn't retrieve version control information for %c" + plugin.name + "%c!", "color: #8E0000", "color. #000" );
                         } else {
                             console.warn( "Couldn't retrieve version control information for " + plugin.name + "!" );
@@ -274,69 +295,86 @@
             } );
         }
     };
-    Fancy.require           = function( plugins ) {
-        jQuery( function() {
-            for( var i in plugins ) {
-                if( plugins.hasOwnProperty( i ) ) {
+    /**
+     * checks if plugins are installed and throws error if not
+     * @param {Object} plugins
+     */
+    Fancy.require = function ( plugins ) {
+        jQuery( function () {
+            for ( var i in plugins ) {
+                if ( plugins.hasOwnProperty( i ) ) {
                     var vers;
-                    if( i.indexOf( "Fancy." ) == 0 ) {
+                    if ( i.indexOf( "Fancy." ) == 0 ) {
                         vers = Fancy.getKey( window, i );
                     } else {
                         vers = window [ i ].prototype.version || ( i == "jQuery" ? jQuery.prototype.jquery : false );
                     }
-                    if( typeof window [ i ] == "undefined" || ( vers && plugins [ i ] && Fancy.compareversion( plugins [ i ], vers ) ) ) {
+                    if ( typeof window [ i ] == "undefined" || ( vers && plugins [ i ] && Fancy.compareversion( plugins [ i ], vers ) ) ) {
                         throw "Error: " + i + " " + ( plugins [ i ] ? plugins [ i ] + " " : "" ) + "is required" + ( vers ? ", got " + vers : "" );
                     }
                 }
             }
         } );
     };
-    Fancy.compareversion    = function( needed, is ) {
+    /**
+     * Compares version of plugins
+     * supported 3-part-version only : 0.0.1, 1.1.2
+     * returns true, if needed is greater than is
+     * @param {String} needed
+     * @param {String} is
+     * @returns {boolean}
+     */
+    Fancy.compareversion = function ( needed, is ) {
         // returns true, if needed is greater than is;
         var c = [ parseInt( needed.split( "." ) [ 0 ] ), parseInt( needed.split( "." ) [ 1 ] ), parseInt( needed.split( "." ) [ 2 ] ) ],
             d = [ parseInt( is.split( "." ) [ 0 ] ), parseInt( is.split( "." ) [ 1 ] ), parseInt( is.split( "." ) [ 2 ] ) ];
 
         return c [ 0 ] > d [ 0 ] || ( c [ 0 ] == d [ 0 ] && c [ 1 ] > d [ 1 ] ) || ( c [ 1 ] == d [ 1 ] && c [ 2 ] > d [ 2 ] );
     };
-    Fancy.check             = function( settings, pattern ) {
+    /**
+     * can check if settings matches pattern
+     * @param settings
+     * @param pattern
+     */
+    Fancy.check = function ( settings, pattern ) {
         function checkType( instance, object ) {
-            if( getType( window [ instance ] ) === "function" ) {
+            if ( getType( window [ instance ] ) === "function" ) {
                 return object instanceof window [ instance ] || getType( object ) === instance.toLowerCase();
             }
             return getType( object ) === instance.toLowerCase();
         }
 
-        for( var i in pattern ) {
-            if( pattern.hasOwnProperty( i ) ) {
+        for ( var i in pattern ) {
+            if ( pattern.hasOwnProperty( i ) ) {
                 var mismatch, typeArray, loopCount, type;
-                if( pattern [ i ].type ) {
+                if ( pattern [ i ].type ) {
                     mismatch  = true;
                     typeArray = pattern [ i ].type.split( "|" );
-                    for( loopCount = 0; loopCount < typeArray.length; loopCount++ ) {
-                        if( mismatch ) {
+                    for ( loopCount = 0; loopCount < typeArray.length; loopCount++ ) {
+                        if ( mismatch ) {
                             type = checkType( typeArray [ loopCount ], settings[ i ] );
-                            if( type ) {
+                            if ( type ) {
                                 mismatch = false;
                             }
                         }
                     }
-                    if( mismatch ) {
+                    if ( mismatch ) {
                         throw "Error: Expected type " + typeArray.join( " or " ) + " but got " + Fancy.capitalize( typeof settings [ i ] ) + " for " + i;
                     }
                 }
 
-                if( pattern [ i ].required ) {
+                if ( pattern [ i ].required ) {
                     mismatch = false;
-                    switch( getType( settings[ i ] ) ) {
+                    switch ( getType( settings[ i ] ) ) {
                         case "string":
-                            if( !settings [ i ] ) {
+                            if ( !settings [ i ] ) {
                                 mismatch = true;
                             }
                             break;
                         case "object":
-                            if( settings [ i ] === null ) {
+                            if ( settings [ i ] === null ) {
                                 mismatch = true;
-                            } else if( !Object.keys( settings [ i ] ).length ) {
+                            } else if ( !Object.keys( settings [ i ] ).length ) {
                                 mismatch = true;
                             }
                             break;
@@ -344,27 +382,27 @@
                             mismatch = true;
                             break;
                     }
-                    if( mismatch ) {
+                    if ( mismatch ) {
                         throw "Error: " + i + " is required";
                     }
                 }
 
-                if( pattern [ i ].types && settings [ i ] && settings [ i ].length ) {
-                    for( var b = 0; b < settings [ i ].length; b++ ) {
+                if ( pattern [ i ].types && settings [ i ] && settings [ i ].length ) {
+                    for ( var b = 0; b < settings [ i ].length; b++ ) {
                         typeArray = pattern [ i ].types.split( "|" );
                         mismatch  = false;
-                        for( loopCount = 0; loopCount < typeArray.length; loopCount++ ) {
-                            if( !mismatch ) {
+                        for ( loopCount = 0; loopCount < typeArray.length; loopCount++ ) {
+                            if ( !mismatch ) {
                                 type = checkType( typeArray [ loopCount ], settings[ i ][ b ] );
-                                if( settings [ i ] [ b ] === null && typeArray [ loopCount ] != "Null" ) {
+                                if ( settings [ i ] [ b ] === null && typeArray [ loopCount ] != "Null" ) {
                                     type = false;
                                 }
-                                if( type ) {
+                                if ( type ) {
                                     mismatch = true;
                                 }
                             }
                         }
-                        if( !mismatch ) {
+                        if ( !mismatch ) {
                             throw "Error: Expected type " + typeArray.join( " or " ) + " but got " + Fancy.capitalize( getType( settings [ i ] [ b ] ) ) + " for " + i + "'s items";
                         }
                     }
@@ -374,71 +412,128 @@
         }
 
     };
-    Fancy.watch             = function( obj, prop, handler ) {
+    /**
+     * will redefine the property with getter and setter to call handler on setter call
+     * @param {Object} obj
+     * @param {String} prop
+     * @param {Function} handler
+     */
+    Fancy.watch = function ( obj, prop, handler ) {
         var oldval = obj[ prop ], newval = oldval,
-            getter = function() {
+            getter = function () {
                 return newval;
             },
-            setter = function( val ) {
+            setter = function ( val ) {
                 oldval = newval;
                 return newval = val === oldval ? val : handler.call( obj, prop, oldval, val );
             };
-        if( Object.defineProperty ) {
+        if ( Object.defineProperty ) {
             Object.defineProperty( obj, prop, {
                 get: getter,
                 set: setter
             } );
-        } else if( Object.prototype.__defineGetter__ && Object.prototype.__defineSetter__ ) {
+        } else if ( Object.prototype.__defineGetter__ && Object.prototype.__defineSetter__ ) {
             Object.prototype.__defineGetter__.call( obj, prop, getter );
             Object.prototype.__defineSetter__.call( obj, prop, setter );
         }
-        if( Fancy.isArray( obj[ prop ] ) ) {
-            for( var i = 0; i < obj[ prop ].length; i++ ) {
+        if ( Fancy.isArray( obj[ prop ] ) ) {
+            for ( var i = 0; i < obj[ prop ].length; i++ ) {
                 Fancy.watch( obj[ prop ], i, handler );
             }
-        } else if( Fancy.isObject( obj[ prop ] ) ) {
-            for( var p in obj[ prop ] ) {
-                if( obj[ prop ].hasOwnProperty( p ) ) {
+        } else if ( Fancy.isObject( obj[ prop ] ) ) {
+            for ( var p in obj[ prop ] ) {
+                if ( obj[ prop ].hasOwnProperty( p ) ) {
                     Fancy.watch( obj[ prop ], p, handler );
                 }
             }
         }
     };
-    Fancy.unwatch           = function( obj, prop ) {
-        var val     = obj[ prop ];
+    /**
+     * will delete and reapply the property without getter and setter
+     * @param {Object} obj
+     * @param {String} prop
+     */
+    Fancy.unwatch = function ( obj, prop ) {
+        var val = obj[ prop ];
         delete obj[ prop ];
         obj[ prop ] = val;
     };
-    Fancy.scrollParent      = function( el ) {
+    /**
+     * will return closest scrollable parent of element
+     * @param el
+     * @returns {*}
+     */
+    Fancy.scrollParent = function ( el ) {
         var position            = el.css( "position" ),
             excludeStaticParent = position === "absolute",
             scrollParent;
 
-        scrollParent = el.parents().filter( function() {
+        scrollParent = el.parents().filter( function () {
             var parent = jQuery( this );
-            if( excludeStaticParent && parent.css( "position" ) === "static" ) {
+            if ( excludeStaticParent && parent.css( "position" ) === "static" ) {
                 return false;
             }
             return ( /(auto|scroll)/ ).test( parent.css( "overflow" ) + parent.css( "overflow-y" ) + parent.css( "overflow-x" ) ) && parent [ 0 ].scrollHeight - parent.outerHeight() > 0;
         } ).eq( 0 );
         return position === "fixed" || !scrollParent.length ? jQuery( el [ 0 ].ownerDocument || document ) : scrollParent;
     };
-    Fancy.settings          = {};
-    Fancy.api.set           = function( name, fn, check ) {
+    /**
+     * will debug if allowed
+     * @returns {boolean}
+     */
+    Fancy.debug = function () {
+        if ( Fancy.debugEnabled ) {
+            console.debug.apply( console, arguments );
+            return true;
+        }
+        return false;
+    };
+    /**
+     * will return absolute url
+     * @param uri
+     * @returns {string}
+     */
+    Fancy.url            = function ( uri ) {
+        if ( typeof uri === "string" ) {
+            return uri.charAt( 0 ) === "/" ? Fancy.root + uri : Fancy.root + "/" + uri;
+        }
+    };
+
+    Fancy.isOpera        = !!window.opera || navigator.userAgent.indexOf( " OPR/" ) >= 0;
+    Fancy.isFirefox      = typeof InstallTrigger !== "undefined";
+    Fancy.isSafari       = Object.prototype.toString.call( window.HTMLElement ).indexOf( "Constructor" ) > 0;
+    Fancy.isIE           = !!document.documentMode;
+    Fancy.isChrome       = !!window.chrome && !Fancy.isOpera && n.indexOf( "edge/" ) === -1 && !Fancy.isIE;
+    Fancy.apple          = n.indexOf( "iphone" ) >= 0 || n.indexOf( "ipad" ) >= 0 || n.indexOf( "ipod" ) > 0;
+    Fancy.mobile         = n.indexOf( "mobile" ) >= 0 || n.indexOf( "android" ) >= 0 || Fancy.apple;
+    Fancy.versionControl = true;
+    Fancy.debugEnabled   = false;
+    Fancy.settings       = {};
+    Fancy.root           = (function () {
+        var e = document.getElementsByTagName( "script" ), n = e[ e.length - 1 ], r = n.src.replace( location.origin, "" ).split( "/" ), t = location.pathname.split( "/" ), i = !1, o = 0;
+        for ( var a in r )i || (r[ a ] == t[ a ] ? o++ : i = !0);
+        return location.origin + t.slice( 0, o ).join( "/" );
+    })();
+
+    Fancy.api = Fancy.prototype = {
+        version: "1.2.0",
+        name   : "Fancy"
+    };
+    Fancy.api.set           = function ( name, fn, check ) {
         var instance;
 
-        if( this.element.length ) {
+        if ( this.element.length ) {
             var data = this.get( name );
-            if( check === false ? false : data && data.length ) {
-                for( var i = 0; i < data.length; i++ ) {
-                    if( typeof data [ i ] == "undefined" ) {
+            if ( check === false ? false : data && data.length ) {
+                for ( var i = 0; i < data.length; i++ ) {
+                    if ( typeof data [ i ] == "undefined" ) {
                         instance   = fn( jQuery( this.element [ i ] ) );
                         data [ i ] = instance;
                         jQuery( this.element [ i ] ).data( name, instance );
                     }
                 }
             }
-            if( check === false ? true : !data ) {
+            if ( check === false ? true : !data ) {
                 instance = fn( this.element );
                 this.element.data( name, instance );
                 return instance;
@@ -447,12 +542,12 @@
             }
         }
     };
-    Fancy.api.get           = function( margin ) {
-        if( margin.indexOf( 'Fancy' ) != 0 ) {
-            if( typeof this [ margin ] == "function" ) {
+    Fancy.api.get           = function ( margin ) {
+        if ( margin.indexOf( 'Fancy' ) != 0 ) {
+            if ( typeof this [ margin ] == "function" ) {
                 margin = "Fancy" + margin [ 0 ].toUpperCase() + margin.slice( 1, margin.length );
             } else {
-                if( this.isChrome ) {
+                if ( this.isChrome ) {
                     console.error( "\"%c" + margin + "%c\" is not a function of Fancy!", "color: blue", "color: #000" );
                 } else {
                     console.error( "\"" + margin + "\" is not a function of Fancy!" );
@@ -460,18 +555,18 @@
                 return false;
             }
         }
-        if( this.element.length > 1 ) {
+        if ( this.element.length > 1 ) {
             var ret = [];
-            this.element.each( function() {
+            this.element.each( function () {
                 ret.push( jQuery( this ).data( margin ) );
             } );
             return ret;
         }
         return this.element.data( margin );
     };
-    Fancy.api.fullHeight    = function( margin ) {
+    Fancy.api.fullHeight    = function ( margin ) {
         var padding = true, border = true;
-        if( typeof margin === "object" ) {
+        if ( typeof margin === "object" ) {
             padding = margin.padding != false;
             border  = margin.border != false;
         }
@@ -482,9 +577,9 @@
                + (border ? parseInt( this.element.css( "borderTopWidth" ) ) : 0)
                + (margin ? parseInt( this.element.css( "marginTop" ) ) + parseInt( this.element.css( "marginBottom" ) ) : 0);
     };
-    Fancy.api.fullWidth     = function( margin ) {
+    Fancy.api.fullWidth     = function ( margin ) {
         var padding = true, border = true;
-        if( typeof margin === "object" ) {
+        if ( typeof margin === "object" ) {
             padding = margin.padding != false;
             border  = margin.border != false;
         }
@@ -495,30 +590,30 @@
                + (border ? parseInt( this.element.css( "borderRightWidth" ) ) : 0)
                + (margin ? parseInt( this.element.css( "marginLeft" ) ) + parseInt( this.element.css( "marginRight" ) ) : 0);
     };
-    Fancy.api.preventSelect = function() {
+    Fancy.api.preventSelect = function () {
         this.element.on( "selectstart", false ).attr( "unselectable", "on" ).css( "userSelect", "none" );
         return this.element;
     };
-    Fancy.api.allowSelect   = function() {
+    Fancy.api.allowSelect   = function () {
         this.element.off( "selectstart" ).removeAttr( "unselectable" ).css( "userSelect", "" );
         return this.element;
     };
 
-    Fancy.getKey = function( o, s ) {
+    Fancy.getKey = function ( o, s ) {
         s = s.replace( /\[(\w+)\]/g, '.$1' ); // convert indexes to properties
         s = s.replace( /^\./, '' ); // strip a leading dot
         var a = s.split( '.' );
-        for( var i = 0; i < a.length; i++ ) {
+        for ( var i = 0; i < a.length; i++ ) {
             var k = a[ i ];
-            if( k.indexOf( "(" ) === -1 ) {
-                if( o.hasOwnProperty( k ) ) {
+            if ( k.indexOf( "(" ) === -1 ) {
+                if ( o.hasOwnProperty( k ) ) {
                     o = o[ k ];
                 } else {
                     return;
                 }
             } else {
                 var K = k.split( "(" )[ 0 ];
-                if( o[ K ] !== null && o[ K ] !== null ) {
+                if ( o[ K ] !== null && o[ K ] !== null ) {
                     o = o[ K ]();
                 } else {
                     return;
@@ -528,7 +623,7 @@
         return o;
     };
 
-    if( typeof noGlobal === typeof undefined ) {
+    if ( typeof noGlobal === typeof undefined ) {
         window.Fancy = Fancy;
     }
     return Fancy;
