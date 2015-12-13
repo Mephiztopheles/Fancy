@@ -329,11 +329,15 @@
      * @returns {boolean}
      */
     Fancy.compareversion = function ( needed, is ) {
-        // returns true, if needed is greater than is;
-        var c = [ parseInt( needed.split( "." ) [ 0 ] ), parseInt( needed.split( "." ) [ 1 ] ), parseInt( needed.split( "." ) [ 2 ] ) ],
-            d = [ parseInt( is.split( "." ) [ 0 ] ), parseInt( is.split( "." ) [ 1 ] ), parseInt( is.split( "." ) [ 2 ] ) ];
+        if ( typeof needed == "string" && typeof is === "string" ) {
+            // returns true, if needed is greater than is;
+            var c = [ parseInt( needed.split( "." ) [ 0 ] ), parseInt( needed.split( "." ) [ 1 ] ), parseInt( needed.split( "." ) [ 2 ] ) ],
+                d = [ parseInt( is.split( "." ) [ 0 ] ), parseInt( is.split( "." ) [ 1 ] ), parseInt( is.split( "." ) [ 2 ] ) ];
 
-        return c [ 0 ] > d [ 0 ] || ( c [ 0 ] == d [ 0 ] && c [ 1 ] > d [ 1 ] ) || ( c [ 1 ] == d [ 1 ] && c [ 2 ] > d [ 2 ] );
+            return c [ 0 ] > d [ 0 ] || ( c [ 0 ] == d [ 0 ] && c [ 1 ] > d [ 1 ] ) || ( c [ 1 ] == d [ 1 ] && c [ 2 ] > d [ 2 ] );
+        } else if ( needed === false ) {
+            return true;
+        }
     };
     /**
      * can check if settings matches pattern
@@ -516,7 +520,7 @@
     Fancy.root           = root;
 
     Fancy.api = Fancy.prototype = {
-        version: "1.2.0",
+        version: "1.2.1",
         name   : "Fancy"
     };
     Fancy.api.set           = function ( name, fn, check ) {

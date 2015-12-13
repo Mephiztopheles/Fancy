@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <title>Fancy</title>
         <script src="../fancy.js"></script>
+        <script>Fancy.install( "lexer" );</script>
         <script>Fancy.install( "template" )( function() {console.log( Fancy.template )} );</script>
         <script>Fancy.install( "date" )( function() {console.log( Fancy.date )} );</script>
     </head>
@@ -21,7 +22,7 @@
         <script>
             var scope = {
                 title: "Open Console!",
-                text : "Recently installed jQuery, Fancy.template and Fancy.date.",
+                text : "Recently installed jQuery, Fancy.lexer, Fancy.template and Fancy.date.",
                 input: ""
             };
             var tpl = Fancy( "#template" ).template( { scope: scope } );
