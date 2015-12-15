@@ -428,10 +428,10 @@
      */
     Fancy.watch = function ( obj, prop, handler ) {
         var oldval = obj[ prop ], newval = oldval,
-            getter = function () {
+            getter                       = function () {
                 return newval;
             },
-            setter = function ( val ) {
+            setter                       = function ( val ) {
                 oldval = newval;
                 return newval = val === oldval ? val : handler.call( obj, prop, oldval, val );
             };
@@ -506,6 +506,12 @@
             return uri.charAt( 0 ) === "/" ? Fancy.root + uri : Fancy.root + "/" + uri;
         }
     };
+    /**
+     * check if v is null or undefined
+     * @param v
+     * @returns {boolean}
+     */
+    Fancy.undefined = function ( v ) {return v === undefined || v === null;};
 
     Fancy.isOpera        = !!window.opera || navigator.userAgent.indexOf( " OPR/" ) >= 0;
     Fancy.isFirefox      = typeof InstallTrigger !== "undefined";
@@ -520,7 +526,7 @@
     Fancy.root           = root;
 
     Fancy.api = Fancy.prototype = {
-        version: "1.2.1",
+        version: "1.3.0",
         name   : "Fancy"
     };
     Fancy.api.set           = function ( name, fn, check ) {
