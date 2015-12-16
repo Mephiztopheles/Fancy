@@ -512,6 +512,47 @@
      * @returns {boolean}
      */
     Fancy.undefined = function ( v ) {return v === undefined || v === null;};
+    /**
+     * check if objects are the same
+     * @param object1
+     * @param object2
+     * @returns {boolean}
+     */
+    Fancy.equals = function ( object1, object2 ) {
+        if ( typeof object1 != typeof object2 ) {
+            return false;
+        }
+        var propName;
+        if ( Fancy.getType( object1 ) === "array" || Fancy.getType( object1 ) === "object" ) {
+            if ( Object.keys( object1 ).length !== Object.keys( object2 ).length ) {
+                return false;
+            }
+            for ( propName in object1 ) {
+                if ( object1.hasOwnProperty( propName ) ) {
+                    if ( typeof object1[ propName ] != typeof object2[ propName ] ) {
+                        return false;
+                    }
+                }
+            }
+            for ( propName in object2 ) {
+                if ( object2.hasOwnProperty( propName ) ) {
+                    if ( typeof object1[ propName ] != typeof object2[ propName ] ) {
+                        return false;
+                    }
+                    if ( (Fancy.getType( object1[ propName ] ) === "array" && Fancy.getType( object2[ propName ] ) === "array") || (Fancy.getType( object1[ propName ] ) === "object" && Fancy.getType( object2[ propName ] ) === "object") ) {
+                        if ( !Fancy.equals( object1[ propName ], object2[ propName ] ) ) {
+                            return false;
+                        }
+                    } else if ( object1[ propName ] != object2[ propName ] ) {
+                        return false;
+                    }
+                }
+            }
+        } else if ( object1 != object2 ) {
+            return false;
+        }
+        return true;
+    };
 
     Fancy.isOpera        = !!window.opera || navigator.userAgent.indexOf( " OPR/" ) >= 0;
     Fancy.isFirefox      = typeof InstallTrigger !== "undefined";
