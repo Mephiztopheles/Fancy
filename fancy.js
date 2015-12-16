@@ -78,7 +78,7 @@
                 return deepCopy;
             }
         }
-        return copy( obj );
+        return Fancy.copy( obj );
     }
 
     var n = navigator.userAgent.toLowerCase();
@@ -588,7 +588,7 @@
      * @param copyProperties
      * @returns object
      */
-    Fancy.copy = function copy( object, copyProperties ) {
+    Fancy.copy = function ( object, copyProperties ) {
         if ( object === undefined ) {
             return undefined;
         } else if ( object === null ) {
