@@ -51,6 +51,35 @@
         }
         return typeof obj === "object" || typeof obj === "function" ? class2type[ toString.call( obj ) ] || "object" : typeof obj;
     }
+    /**
+     * will copy the object
+     * @param obj
+     * @param depth
+     * @returns {*}
+     */
+    function copyObject( obj, depth ) {
+        depth = depth || 0;
+        if ( depth < 10 /* max depth */ ) {
+            if ( getType( obj ) === "object" ) {
+                var deepCopy = {};
+                var props    = Object.getOwnPropertyNames( obj );
+                props.forEach( function ( it ) {
+                    if ( getType( obj[ it ] ) === "object" ) {
+                        deepCopy[ it ] = copyObject( obj[ it ], depth + 1 );
+                    } else if ( getType( obj[ it ] ) === "array" ) {
+                        deepCopy[ it ] = [];
+                        obj[ it ].forEach( function ( x ) {
+                            deepCopy[ it ].push( copyObject( x, depth + 1 ) );
+                        } );
+                    } else {
+                        Object.defineProperty( deepCopy, it, Object.getOwnPropertyDescriptor( obj, it ) );
+                    }
+                } );
+                return deepCopy;
+            }
+        }
+        return copy( obj );
+    }
 
     var n = navigator.userAgent.toLowerCase();
 
@@ -552,6 +581,33 @@
             return false;
         }
         return true;
+    };
+    /**
+     * copies object and returns new instance without references
+     * @param object
+     * @param copyProperties
+     * @returns object
+     */
+    Fancy.copy = function copy( object, copyProperties ) {
+        if ( object === undefined ) {
+            return undefined;
+        } else if ( object === null ) {
+            return null;
+        } else if ( copyProperties ) {
+
+            if ( getType( object ) === "object" ) {
+                return copyObject( object );
+            } else if ( getType( object ) === "array" ) {
+                var list = [];
+                object.forEach( function ( it, i ) {
+                    list[ i ] = copyObject( it );
+                } );
+                return list;
+            }
+
+        } else {
+            return JSON.parse( JSON.stringify( object ) );
+        }
     };
 
     Fancy.isOpera        = !!window.opera || navigator.userAgent.indexOf( " OPR/" ) >= 0;
