@@ -603,6 +603,8 @@
                     list[ i ] = copyObject( it );
                 } );
                 return list;
+            } else {
+                return JSON.parse( JSON.stringify( object ) );
             }
 
         } else {
