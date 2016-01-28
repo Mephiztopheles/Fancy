@@ -13,7 +13,7 @@
         <div></div>
         <script>
 			var f = Fancy("div");
-			console.log(f, f.test({log:true}),Fancy(f.test()));
+			console.log("Fancy: %o\r\nFancy.test: %o\r\nFancy(Fancy.test): %o\r\n$(Fancy): %o",f, f.test({log:true}),Fancy(f.test()), $(f));
         </script>
     </body>
 

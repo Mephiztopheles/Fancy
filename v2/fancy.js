@@ -9,12 +9,21 @@
         return;
     }
     if ( typeof jQuery != "function" ) {
-        console.error( "Fancy requires jQuery" );
+        console.error( "Fancy requires jQuery: https://jquery.com" );
     }
-    var push       = Array.prototype.push,
+    var array = [],
+        push       = array.push,
+        splice     = array.splice,
+        sort       = array.sort,
         class2type = {},
         toString   = class2type.toString,
-        versions   = {};
+        versions   = {},
+        prototype  = {
+            length :0,
+            sort   : sort,
+            splice : splice,
+            push   : push
+        };
 
     function isArrayLike( obj ) {
 
@@ -36,7 +45,11 @@
 
     versions[ "Fancy" ] = "2.0.0";
     Fancy.api           = Fancy.prototype = {
-        name: "Fancy"
+        name        : "Fancy",
+        constructor : Fancy,
+        each        : function ( callback ) {
+            return Fancy.each( this, callback );
+        }
     };
     Fancy.dev           = {};
     
@@ -53,7 +66,6 @@
         }
         
         api.selector = selector;
-        api.length   = 0;
         return Fancy.makeArray( elements, api );
     }
     Core.prototype = Fancy.api;
@@ -169,12 +181,6 @@
 
         return ret;
     };
-    Fancy.api.each  = function ( callback ) {
-        return Fancy.each( this, callback );
-    };
-    Fancy.api.push = function() {
-        return Fancy.merge( this, arguments );
-    };
 
     Fancy.dev.initPlugin = function ( name, version,defaultSettings ) {
         if( defaultSettings ) {
@@ -188,7 +194,10 @@
             return "function " + name + "(settings) { [Fancy.plugin] }";
         };
 
-        API.api = API.prototype = {};
+        API.api = API.prototype = {
+            constructor :API
+        };
+        Fancy.extend(API.api, prototype);
         function Plugin( selector, settings ) {
             return new Core( selector, this, settings );
         }
@@ -258,6 +267,7 @@
     };
 
 
+    Fancy.extend(Fancy.api, prototype);
     window.Fancy = Fancy;
 
 })( window, typeof undefined );
