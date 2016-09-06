@@ -10,16 +10,22 @@
     } else {
         factory( global );
     }
-// Pass this if window is not defined yet
+    // Pass this if window is not defined yet
 }( typeof window !== "undefined" ? window : this, function ( window, noGlobal ) {
     var root = (function () {
         var e = document.getElementsByTagName( "script" ), n = e[ e.length - 1 ], r = n.src.replace( location.origin, "" ).split( "/" ), t = location.pathname.split( "/" ), i = !1, o = 0;
-        for ( var a in r )i || (r[ a ] == t[ a ] ? o++ : i = !0);
+        for ( var a in r ) {
+            i || (r[ a ] == t[ a ] ? o++ : i = !0);
+        }
         return location.origin + t.slice( 0, o ).join( "/" );
     })();
+
+    var scripts = document.getElementsByTagName( "script" );
+    var url     = scripts[ scripts.length - 1 ].src.split( "?" );
+
     if ( typeof jQuery != "function" ) {
         document.write( '<script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>' );
-        var scripts                                      = document.getElementsByTagName( "script" );
+        scripts                                          = document.getElementsByTagName( "script" );
         scripts[ scripts.length - 1 ].onload             = function () {
             Fancy.version( Fancy.api );
         };
@@ -51,6 +57,7 @@
         }
         return typeof obj === "object" || typeof obj === "function" ? class2type[ toString.call( obj ) ] || "object" : typeof obj;
     }
+
     /**
      * will copy the object
      * @param obj
@@ -624,8 +631,17 @@
     Fancy.settings       = {};
     Fancy.root           = root;
 
+
+    if ( url.length == 2 ) {
+        var props = url[ 1 ].split( "&" );
+        props.forEach( function ( part ) {
+            var s           = part.split( "=" );
+            Fancy[ s[ 0 ] ] = JSON.parse( s[ 1 ] );
+        } );
+    }
+
     Fancy.api = Fancy.prototype = {
-        version: "1.3.1",
+        version: "1.3.2",
         name   : "Fancy"
     };
     Fancy.api.set           = function ( name, fn, check ) {
@@ -680,11 +696,11 @@
             border  = margin.border != false;
         }
         return this.element.height()
-               + (padding ? parseInt( this.element.css( "paddingTop" ) ) : 0)
-               + (padding ? parseInt( this.element.css( "paddingBottom" ) ) : 0)
-               + (border ? parseInt( this.element.css( "borderBottomWidth" ) ) : 0)
-               + (border ? parseInt( this.element.css( "borderTopWidth" ) ) : 0)
-               + (margin ? parseInt( this.element.css( "marginTop" ) ) + parseInt( this.element.css( "marginBottom" ) ) : 0);
+            + (padding ? parseInt( this.element.css( "paddingTop" ) ) : 0)
+            + (padding ? parseInt( this.element.css( "paddingBottom" ) ) : 0)
+            + (border ? parseInt( this.element.css( "borderBottomWidth" ) ) : 0)
+            + (border ? parseInt( this.element.css( "borderTopWidth" ) ) : 0)
+            + (margin ? parseInt( this.element.css( "marginTop" ) ) + parseInt( this.element.css( "marginBottom" ) ) : 0);
     };
     Fancy.api.fullWidth     = function ( margin ) {
         var padding = true, border = true;
@@ -693,11 +709,11 @@
             border  = margin.border != false;
         }
         return this.element.width()
-               + (padding ? parseInt( this.element.css( "paddingLeft" ) ) : 0)
-               + (padding ? parseInt( this.element.css( "paddingRight" ) ) : 0)
-               + (border ? parseInt( this.element.css( "borderLeftWidth" ) ) : 0)
-               + (border ? parseInt( this.element.css( "borderRightWidth" ) ) : 0)
-               + (margin ? parseInt( this.element.css( "marginLeft" ) ) + parseInt( this.element.css( "marginRight" ) ) : 0);
+            + (padding ? parseInt( this.element.css( "paddingLeft" ) ) : 0)
+            + (padding ? parseInt( this.element.css( "paddingRight" ) ) : 0)
+            + (border ? parseInt( this.element.css( "borderLeftWidth" ) ) : 0)
+            + (border ? parseInt( this.element.css( "borderRightWidth" ) ) : 0)
+            + (margin ? parseInt( this.element.css( "marginLeft" ) ) + parseInt( this.element.css( "marginRight" ) ) : 0);
     };
     Fancy.api.preventSelect = function () {
         this.element.on( "selectstart", false ).attr( "unselectable", "on" ).css( "userSelect", "none" );
@@ -709,8 +725,8 @@
     };
 
     Fancy.getKey = function ( o, s ) {
-        s = s.replace( /\[(\w+)\]/g, '.$1' ); // convert indexes to properties
-        s = s.replace( /^\./, '' ); // strip a leading dot
+        s     = s.replace( /\[(\w+)\]/g, '.$1' ); // convert indexes to properties
+        s     = s.replace( /^\./, '' ); // strip a leading dot
         var a = s.split( '.' );
         for ( var i = 0; i < a.length; i++ ) {
             var k = a[ i ];

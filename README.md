@@ -1,3 +1,7 @@
 # Fancy
+Javascript Library core function
 
-[![Mephiztopheles/Fancy API Documentation](https://www.omniref.com/github/Mephiztopheles/Fancy.png)](https://www.omniref.com/github/Mephiztopheles/Fancy)
+###Changelog
+1.3.2
+-----
+Settings over script-tag passable: `lib/fancy.min.js?versionControl=false`
