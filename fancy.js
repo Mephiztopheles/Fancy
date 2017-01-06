@@ -307,7 +307,7 @@
             }
 
             jQuery.ajax( {
-                url    : "http://version.mephiztopheles.wtf/",
+                url    : "https://version.mephiztopheles.wtf/",
                 data   : {
                     plugin: plugin.name
                 },
