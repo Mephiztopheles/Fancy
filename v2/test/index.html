@@ -5,7 +5,8 @@
         <title>Fancy</title>
         <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
         <link rel="stylesheet" href="../../../Fancy.date/fancydate.css">
-        <script src="../fancy.js"></script>
+        <!--<script src="../../dist/fancy.js"></script>-->
+        <script src="test.js"></script>
     </head>
     <body>
         <div></div>
@@ -16,7 +17,8 @@
         <input type="text">
         <input type="text">
         <script>
-			var f = Fancy("div");
+            var f = new Fancy( "div" );
+            var d = new f.date();
         </script>
     </body>
 
