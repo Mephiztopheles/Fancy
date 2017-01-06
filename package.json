@@ -1,0 +1,33 @@
+{
+    "name"            : "fancy",
+    "version"         : "1.3.3",
+    "description"     : "Fancy library root",
+    "main"            : "fancy.js",
+    "directories"     : {
+        "test" : "test"
+    },
+    "dependencies"    : {
+        "grunt"                : "^0.4.5",
+        "grunt-cli"            : "^0.1.13",
+        "grunt-contrib-uglify" : "^2.0.0"
+    },
+    "devDependencies" : {},
+    "scripts"         : {
+        "test" : "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository"      : {
+        "type" : "git",
+        "url"  : "git+https://github.com/Mephiztopheles/Fancy.git"
+    },
+    "keywords"        : [
+        "fancy",
+        "javascript",
+        "library"
+    ],
+    "author"          : "Markus Ahrweiler",
+    "license"         : "CC-BY-ND-4.0",
+    "bugs"            : {
+        "url" : "https://github.com/Mephiztopheles/Fancy/issues"
+    },
+    "homepage"        : "https://github.com/Mephiztopheles/Fancy#readme"
+}

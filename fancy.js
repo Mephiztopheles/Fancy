@@ -641,7 +641,7 @@
     }
 
     Fancy.api = Fancy.prototype = {
-        version: "1.3.2",
+        version: "1.3.3",
         name   : "Fancy"
     };
     Fancy.api.set           = function ( name, fn, check ) {
